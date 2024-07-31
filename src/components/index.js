@@ -7,6 +7,7 @@ import PropertyPage from "./PropertyPage"
 import SignIn from "./SignIn"
 import SignUp from "./SignUp"
 import Input from "./Input"
+import ReviewSection from "./ReviewsSection"
 
 export {
     Btn,
@@ -18,4 +19,5 @@ export {
     SignIn,
     SignUp,
     Input,
+    ReviewSection
 };

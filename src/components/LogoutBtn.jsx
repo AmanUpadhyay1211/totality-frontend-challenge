@@ -1,5 +1,6 @@
+"use client"
 import React, { useEffect, useState } from "react";
-import Btn from "../Btn";
+import {Btn} from "@/components/index";
 import { useDispatch } from "react-redux";
 import authService from "@/appwrite/authService";
 import { logout } from "@/Redux/slices/authSlice";
