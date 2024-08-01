@@ -8,6 +8,9 @@ import SignIn from "./SignIn"
 import SignUp from "./SignUp"
 import Input from "./Input"
 import ReviewSection from "./ReviewsSection"
+import LogoutBtn from "./LogoutBtn"
+import HeroSection from "./HeroSection"
+
 
 export {
     Btn,
@@ -19,5 +22,7 @@ export {
     SignIn,
     SignUp,
     Input,
-    ReviewSection
+    ReviewSection,
+    LogoutBtn,
+HeroSection,
 };

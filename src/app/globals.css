@@ -31,3 +31,7 @@ body {
     text-wrap: balance;
   }
 }
+
+.text-blue-500 {
+  color: #3b82f6; /* TailwindCSS blue-500 color */
+}

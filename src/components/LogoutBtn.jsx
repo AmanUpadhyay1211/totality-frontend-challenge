@@ -16,6 +16,7 @@ function LogoutBtn() {
       try {
         const user = await authService.getCurrentUser();
         setUserData(user);
+        console.log(user)
       } catch (error) {
         console.error("Failed to fetch user data:", error);
       }

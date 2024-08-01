@@ -1,9 +1,10 @@
-"use client"
+"use client";
 import React, { useState } from 'react';
+import { FaGoogle, FaGithub } from 'react-icons/fa';
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import authService from '../appwrite/authService';
-import { login } from '@/Redux/slices/authSlice';
 import { useDispatch } from 'react-redux';
+import { login } from '@/Redux/slices/authSlice';
 import { useForm } from 'react-hook-form';
 import { Logo, Btn, Input } from "./index";
 import Link from 'next/link';
@@ -19,7 +20,13 @@ function SignIn() {
     const onSignIn = async (data) => {
         setError("");
         try {
-            const loginSession = await authService.createSession({...data});
+            const existingUser = await authService.getCurrentUserbyProvider();
+            if (existingUser) {
+                localStorage.removeItem('access_token');
+                 localStorage.removeItem('refresh_token');
+
+            }
+            const loginSession = await authService.createSession({ ...data });
             if (loginSession) {
                 const userData = await authService.getCurrentUser();
                 if (userData) {
@@ -32,13 +39,32 @@ function SignIn() {
         }
     };
 
+    const handleOAuthLogin = async (provider) => {
+        console.log(provider)
+        setError("");
+        try {
+            const existingUser = await authService.getCurrentUser();
+            if (existingUser) {
+                await authService.logout();
+            }
+            await authService.loginWith(provider);
+            const userData = await authService.getCurrentUser();
+            if (userData) {
+                dispatch(login(userData));
+                router.push("/");
+            }
+        } catch (error) {
+            setError(error.message);
+        }
+    };
+
     return (
         <div className="flex items-center justify-center w-full min-h-screen bg-gray-50">
             <div className="w-full max-w-md bg-white rounded-xl p-10 pt-0 shadow-md">
                 <div className="mb-6 flex justify-center">
                     <Logo className="w-24 h-24" />
                 </div>
-                <h2 className="text-center text-2xl font-bold leading-tight">Sign in to your account</h2>
+                <h2 className="text-center text-black text-2xl font-bold leading-tight">Sign in to your account</h2>
                 <p className="mt-2 text-center text-sm text-gray-600">
                     Don't have an account?&nbsp;
                     <Link href="/signup" className="font-medium text-blue-500 hover:underline">
@@ -46,6 +72,20 @@ function SignIn() {
                     </Link>
                 </p>
                 {error && <p className="text-red-600 mt-4 text-center">{error}</p>}
+                <div className="mt-8 space-y-4">
+                    <button
+                        onClick={() => handleOAuthLogin('google')}
+                        className="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50"
+                    >
+                        <FaGoogle className="mr-2" /> Continue with Google
+                    </button>
+                    <button
+                        onClick={() => handleOAuthLogin('github')}
+                        className="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50"
+                    >
+                        <FaGithub className="mr-2" /> Continue with Github
+                    </button>
+                </div>
                 <form onSubmit={handleSubmit(onSignIn)} className="mt-8 space-y-6">
                     <div>
                         <Input

@@ -14,6 +14,7 @@ class ManageCartService {
   // CRUD operation for Cart
   async createCart(cart){
     const { slug, userID, userName, cartItems, bookedItems } = cart;
+    console.log(cart)
     try {
       const doc = await this.database.createDocument(
         envConf.appwriteDatabaseID,
@@ -21,10 +22,9 @@ class ManageCartService {
         slug,
         {
           userID,
-          email,
           userName,
-          cartItems,
-          bookedItems,
+          cartItems : JSON.stringify(cartItems),
+          bookedItems:JSON.stringify(bookedItems),
         }
       );
       return doc;
@@ -80,7 +80,6 @@ class ManageCartService {
 
   // File upload, in this case it's going to be an image
   async uploadFile(file) {
-    console.log(file)
     try {
       const result = await this.storage.createFile(
         envConf.appwriteBucketID,
@@ -89,27 +88,32 @@ class ManageCartService {
       );
       return result ? result : null;
     } catch (error) {
-      console.log("Appwrite service :: uploadFile :: error", error);
-      return null;
+      console.log("Appwrite serive :: uploadFile :: error", error);
     }
   }
 
   async deleteFile(fileID) {
     try {
-      await this.storage.deleteFile(envConf.appwriteBucketID, fileID);
+      const result = await this.storage.deleteFile(
+        envConf.appwriteBucketID,
+        fileID
+      );
       return result ? result : null;
     } catch (error) {
-      console.log("Appwrite service :: deleteFile :: error", error);
+      console.log("Appwrite serive :: deleteFile :: error", error);
       return false;
     }
   }
 
-  getFilePreview(fileID){
+  getFilePreview(fileID) {
     try {
-      const result = this.storage.getFilePreview(envConf.appwriteBucketID, fileID);
+      const result = this.storage.getFilePreview(
+        envConf.appwriteBucketID,
+        fileID
+      );
       return result ? result : null;
     } catch (error) {
-      console.log("Appwrite service :: getFilePreview :: error", error);
+      console.log("Appwrite serive :: getFilePreview :: error", error);
       return false;
     }
   }

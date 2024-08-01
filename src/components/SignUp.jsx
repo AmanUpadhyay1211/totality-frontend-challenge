@@ -10,6 +10,7 @@ import { useForm } from 'react-hook-form';
 import { Logo, Btn, Input } from "./index";
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { FaGoogle, FaGithub } from 'react-icons/fa';
 
 function SignUp() {
     const [show, setShow] = useState(false);
@@ -22,44 +23,44 @@ function SignUp() {
         setError("");
         try {
             const { name, email, password } = data;
-            console.log(data.avatar)
-            data.avatar=""
-            if (data.avatar.length > 0) {
+            if (data.avatar && data.avatar.length > 0) {
                 const res = await manageCartService.uploadFile(data.avatar[0]);
-                console.log(res)
                 if (res) {
                     data.avatar = res.$id;
                 } else {
                     throw new Error('Failed to upload avatar');
                 }
             }
-            else{
-                data.avatar="";
-            }
-            const newAccount = await authService.createAccount({ email, password, name, avatar : data.avatar});
+            const newAccount = await authService.createAccount({ email, password, name });
             if (newAccount) {
-                const loginSession = await authService.createSession({ email, password });
-                if (loginSession) {
-                    const userData = await authService.getCurrentUser();
-                    if (userData) {
-                        dispatch(login(userData));
-                        router.push("/");
-                    }
-                }
+                newAccount.prefs({avatar : data.avatar})
+             router.push("/signin");
             }
         } catch (error) {
             setError(error.message);
         }
     };
-    
+
+    const handleOAuthLogin = async (provider) => {
+        try {
+            await authService.loginWith(provider);
+            const userData = await authService.getCurrentUser();
+            if (userData) {
+                dispatch(login(userData));
+                router.push("/");
+            }
+        } catch (error) {
+            setError(error.message);
+        }
+    };
 
     return (
-        <div className="flex items-center justify-center w-full min-h-screen bg-gray-50">
+        <main className="flex items-center justify-center w-full min-h-screen bg-gray-50">
             <div className="w-full max-w-md bg-white rounded-xl p-10 pt-0 shadow-md">
                 <div className="mb-6 flex justify-center">
                     <Logo className="w-24 h-24" />
                 </div>
-                <h2 className="text-center text-2xl font-bold leading-tight">Create a new account</h2>
+                <h2 className="text-center text-2xl text-black font-bold leading-tight">Create a new account</h2>
                 <p className="mt-2 text-center text-sm text-gray-600">
                     Already have an account?&nbsp;
                     <Link href="/signin" className="font-medium text-blue-500 hover:underline">
@@ -67,6 +68,20 @@ function SignUp() {
                     </Link>
                 </p>
                 {error && <p className="text-red-600 mt-4 text-center">{error}</p>}
+                <div className="mt-8 space-y-4">
+                    <button 
+                        onClick={() => handleOAuthLogin('google')}
+                        className="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50"
+                    >
+                        <FaGoogle className="mr-2" /> Continue with Google
+                    </button>
+                    <button 
+                        onClick={() => handleOAuthLogin('github')}
+                        className="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50"
+                    >
+                        <FaGithub className="mr-2" /> Continue with GitHub
+                    </button>
+                </div>
                 <form onSubmit={handleSubmit(onSignUp)} className="mt-8 space-y-6">
                     <div>
                         <Input
@@ -112,12 +127,12 @@ function SignUp() {
                     </div>
                     <div>
                         <Input
-                        label="Avatar (optional)"
-                        type="file"
-                        className="mb-4"
-                        accept="image/png, image/jpg, image/jpeg, image/gif"
-                        {...register("avatar", { required: false })}
-                    />
+                            label="Avatar (optional)"
+                            type="file"
+                            className="mb-4"
+                            accept="image/png, image/jpg, image/jpeg, image/gif"
+                            {...register("avatar", { required: false })}
+                        />
                     </div>
                     <div>
                         <Btn type="submit" disabled={isSubmitting} className="bg-blue-500 text-white py-2 px-4 rounded-lg shadow-md hover:bg-blue-600 transition duration-300">
@@ -126,7 +141,7 @@ function SignUp() {
                     </div>
                 </form>
             </div>
-        </div>
+        </main>
     );
 }
 

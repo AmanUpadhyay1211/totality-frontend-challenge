@@ -1,10 +1,15 @@
 import React from 'react';
 import Image from 'next/image';
 
-function Logo({ height = 'h-12', className = '' }) {
+function Logo({ height = '100', className = '' }) {
   return (
     <div className={`flex items-center ${className}`}>
-      <img src="/images/QuilifyLogo.png" alt="logo" className={`${height}`} />
+      <Image
+      src="/images/NextDoor.png"
+      alt="Logo"
+      height={height}
+      width={height}
+      />
     </div>
   );
 }

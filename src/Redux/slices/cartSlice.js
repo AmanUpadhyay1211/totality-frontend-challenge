@@ -1,52 +1,37 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  cart: [
-    // {
-    //   userID: "aman123",
-    //   email : "aman@gmail.com",
-    //   userName: "Aman Upadhyay",
-    //   cartItems : [{},{}],
-    //   bookedItems : [{},{}],
-    // },
-  ]
+  cart: {
+    userID: null,
+    email: null,
+    userName: null,
+    cartItems: [],
+    bookedItems: []
+  }
 };
 
 export const cartSlice = createSlice({
   name: "cart",
   initialState,
   reducers: {
-    createCart: (state, action) => {
-      state.cart.push(action.payload);
+    setCart: (state, action) => {
+      state.cart = action.payload;
     },
     addCartItem: (state, action) => {
-      const userCart = state.cart.find(cart => cart.userID === action.payload.userID);
-      if (userCart) {
-        userCart.cartItems.push(action.payload.item);
-      }
+      state.cart.cartItems.push(action.payload);
     },
     removeCartItem: (state, action) => {
-      const userCart = state.cart.find(cart => cart.userID === action.payload.userID);
-      if (userCart) {
-        userCart.cartItems = userCart.cartItems.filter(cartItem => cartItem !== action.payload.item);
-      }
+      state.cart.cartItems = state.cart.cartItems.filter(cartItem => cartItem !== action.payload);
     },
     addBookedItem: (state, action) => {
-      const userCart = state.cart.find(cart => cart.userID === action.payload.userID);
-      if (userCart) {
-        userCart.bookedItems.push(action.payload.item);
-        userCart.cartItems = userCart.cartItems.filter(cartItem => cartItem !== action.payload.item);
-      }
+      state.cart.bookedItems.push(action.payload);
     },
     removeBookedItem: (state, action) => {
-      const userCart = state.cart.find(cart => cart.userID === action.payload.userID);
-      if (userCart) {
-        userCart.bookedItems = userCart.bookedItems.filter(bookedItem => bookedItem !== action.payload.item);
-      }
+      state.cart.bookedItems = state.cart.bookedItems.filter(bookedItem => bookedItem !== action.payload);
     }
-  },
+  }
 });
 
-export const { createCart, addCartItem, removeCartItem, addBookedItem, removeBookedItem } = cartSlice.actions;
+export const { setCart, addCartItem, removeCartItem, addBookedItem, removeBookedItem } = cartSlice.actions;
 
 export default cartSlice.reducer;
