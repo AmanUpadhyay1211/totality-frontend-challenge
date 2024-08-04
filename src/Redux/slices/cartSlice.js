@@ -1,13 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  cart: {
-    userID: null,
-    email: null,
-    userName: null,
-    cartItems: [],
-    bookedItems: []
-  }
+  cart: { }
 };
 
 export const cartSlice = createSlice({
@@ -18,10 +12,10 @@ export const cartSlice = createSlice({
       state.cart = action.payload;
     },
     addCartItem: (state, action) => {
-      state.cart.cartItems.push(action.payload);
+      state.cart.cartItem.push(action.payload);
     },
     removeCartItem: (state, action) => {
-      state.cart.cartItems = state.cart.cartItems.filter(cartItem => cartItem !== action.payload);
+      state.cart.cartItem = state.cart.cartItem.filter(cartItem => cartItem !== action.payload);
     },
     addBookedItem: (state, action) => {
       state.cart.bookedItems.push(action.payload);

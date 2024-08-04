@@ -9,6 +9,7 @@ function Logo({ height = '100', className = '' }) {
       alt="Logo"
       height={height}
       width={height}
+      priority 
       />
     </div>
   );

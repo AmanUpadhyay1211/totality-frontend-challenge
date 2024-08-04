@@ -1,4 +1,5 @@
 // properties.js
+import Images from "./images";
 const properties= [
   {
     id: 1,
@@ -8,7 +9,7 @@ const properties= [
     location: 'Goa, India',
     bedrooms: 2,
     amenities: ['WiFi', 'Air Conditioning', 'Infinity Pool', 'Hot Tub', 'Free Parking', 'Pet Friendly', 'Breakfast Included', 'Gym', 'Sauna', 'Private Chef'],
-    images: ['/images/apartment1-1.jpg', '/images/apartment1-2.jpg'],
+    images: [Images[0]],
     rating: '4.5/5 (500)',
   },
   {
@@ -19,7 +20,7 @@ const properties= [
     location: 'Manali, India',
     bedrooms: 3,
     amenities: ['WiFi', 'Fireplace', 'Free Parking', 'Pet Friendly', 'Breakfast Included', 'Hot Tub', 'Washer/Dryer', 'Kitchen', 'BBQ Grill', 'Game Room'],
-    images: ['/images/apartment2-1.jpg', '/images/apartment2-2.jpg'],
+    images: [Images[1]],
     rating: '4.7/5 (300)',
   },
   {
@@ -30,7 +31,7 @@ const properties= [
     location: 'New Delhi, India',
     bedrooms: 2,
     amenities: ['WiFi', 'Air Conditioning', 'Free Parking', 'Gym', 'Pet Friendly', 'Breakfast Included', 'Washer/Dryer', 'Kitchen', 'Cable TV', 'Rooftop Access'],
-    images: ['/images/apartment3-1.jpg', '/images/apartment3-2.jpg'],
+    images: [Images[3]],
     rating: '4.8/5 (450)',
   },
   {
@@ -41,7 +42,7 @@ const properties= [
     location: 'Bangalore, India',
     bedrooms: 4,
     amenities: ['WiFi', 'Air Conditioning', 'Free Parking', 'Pet Friendly', 'Breakfast Included', 'Washer/Dryer', 'Kitchen', 'BBQ Grill', 'Game Room', 'Private Yard'],
-    images: ['/images/apartment4-1.jpg', '/images/apartment4-2.jpg'],
+    images: [Images[4]],
     rating: '4.6/5 (400)',
   },
   {
@@ -52,7 +53,7 @@ const properties= [
     location: 'Ooty, India',
     bedrooms: 2,
     amenities: ['WiFi', 'Free Parking', 'Pet Friendly', 'Breakfast Included', 'Fireplace', 'Washer/Dryer', 'Kitchen', 'BBQ Grill', 'Game Room', 'Private Yard'],
-    images: ['/images/apartment5-1.jpg', '/images/apartment5-2.jpg'],
+    images: [Images[5]],
     rating: '4.5/5 (350)',
   },
   {
@@ -63,7 +64,7 @@ const properties= [
     location: 'Mumbai, India',
     bedrooms: 3,
     amenities: ['WiFi', 'Air Conditioning', 'Infinity Pool', 'Hot Tub', 'Free Parking', 'Gym', 'Sauna', 'Private Chef', 'Breakfast Included', 'Rooftop Access'],
-    images: ['/images/apartment6-1.jpg', '/images/apartment6-2.jpg'],
+    images: [Images[6]],
     rating: '4.9/5 (200)',
   },
   {
@@ -74,7 +75,7 @@ const properties= [
     location: 'Coorg, India',
     bedrooms: 2,
     amenities: ['WiFi', 'Free Parking', 'Pet Friendly', 'Breakfast Included', 'Fireplace', 'Hot Tub', 'Washer/Dryer', 'Kitchen', 'BBQ Grill', 'Private Yard'],
-    images: ['/images/apartment7-1.jpg', '/images/apartment7-2.jpg'],
+    images: [Images[7]],
     rating: '4.7/5 (300)',
   },
   {
@@ -85,7 +86,7 @@ const properties= [
     location: 'Goa, India',
     bedrooms: 2,
     amenities: ['WiFi', 'Air Conditioning', 'Free Parking', 'Pet Friendly', 'Breakfast Included', 'Washer/Dryer', 'Kitchen', 'BBQ Grill', 'Private Beach', 'Rooftop Access'],
-    images: ['/images/apartment8-1.jpg', '/images/apartment8-2.jpg'],
+    images: [Images[8]],
     rating: '4.6/5 (350)',
   },
   {
@@ -96,7 +97,7 @@ const properties= [
     location: 'Mumbai, India',
     bedrooms: 1,
     amenities: ['WiFi', 'Air Conditioning', 'Kitchen', 'Gym', 'Free Parking', 'Pet Friendly', 'Washer/Dryer', 'Cable TV', 'Breakfast Included', 'Rooftop Access'],
-    images: ['/images/apartment9-1.jpg', '/images/apartment9-2.jpg'],
+    images: [Images[9]],
     rating: '4.6/5 (450)',
   },
   // ... Repeat similar objects for up to 50 entries ...
@@ -108,7 +109,7 @@ const properties= [
     location: 'Mumbai, India',
     bedrooms: 1,
     amenities: ['WiFi', 'Air Conditioning', 'Kitchen', 'Gym', 'Free Parking', 'Pet Friendly', 'Washer/Dryer', 'Cable TV', 'Breakfast Included', 'Rooftop Access'],
-    images: ['/images/apartment50-1.jpg', '/images/apartment50-2.jpg'],
+    images: [Images[10]],
     rating: '4.6/5 (450)',
   }
 ];

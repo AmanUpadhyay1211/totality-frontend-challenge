@@ -1,59 +1,109 @@
-// components/Navbar.jsx
-"use client"
-import { useState, useEffect } from 'react';
-import Link from 'next/link';
-import { useDispatch, useSelector } from 'react-redux';
-import { logout } from '@/Redux/slices/authSlice';
-import Image from 'next/image';
-import { Logo } from '@/components/index';
+"use client";
+import React, { useState, useEffect } from "react";
+import {
+  HoveredLink,
+  Menu,
+  MenuItem,
+  ProductItem,
+} from "@/components/ui/navbar-menu";
+import { cn } from "@/utils/cn";
+import { Logo, ManageAccount } from "@/components/index";
+import { useSelector } from "react-redux";
+import Link from "next/link";
 
-const Navbar = () => {
-    const dispatch = useDispatch();
-    const user = useSelector((state) => state.auth.user);
+export default function Navbar({ className }) {
+  const reduxUserData = useSelector((state) => state.auth.userData);
+  const reduxCartData = useSelector((state) => state.cart.cart);
+  const [cartItem, setcartItem] = useState(reduxCartData?.cartItem || []);
+  const [JSONcart, setJSONcart] = useState([]);
+  useEffect(() => {
+    setcartItem(reduxCartData?.cartItem || []);
+  }, [reduxCartData]);
+  useEffect(() => {
+    const parsedCart = cartItem.map((item) => {
+      try {
+        return JSON.parse(item);
+      } catch (error) {
+        console.error("Invalid JSON string:", item);
+        return null;
+      }
+    });
+    setJSONcart(parsedCart);
+  }, [cartItem]);
 
-    const handleLogout = () => {
-        dispatch(logout());
-    };
+  // Ensure we log the entire reduxCartData object for debugging
+  console.log("Redux Cart Data:", reduxCartData);
 
-    return (
-        <nav className="bg-transparent w-[100vw] text-white flex mx-auto justify-between  p-4 fixed z-50">
-            <div className="container bg-blue-600 px-6 rounded-3xl flex justify-between items-center">
-                <Link href="/">
-                    <div className="flex items-center space-x-2">
-                        <Logo height='70'/>
-                    </div>
-                </Link>
-                <div className="hidden md:flex space-x-4">
-                    <Link href="/about">
-                        <div className="hover:text-yellow-500">About</div>
-                    </Link>
-                    <Link href="/contact">
-                        <div className="hover:text-yellow-500">Contact</div>
-                    </Link>
-                    {user ? (
-                        <div className="flex items-center space-x-4">
-                            <div className="w-10 h-10 rounded-full overflow-hidden">
-                                <Image src={user.prefs.avatar} alt="User Avatar" width={40} height={40} />
-                            </div>
-                            <button onClick={handleLogout} className="hover:text-yellow-500">Logout</button>
-                        </div>
-                    ) : (
-                        <Link href="/signin">
-                            <div className="hover:text-yellow-500">Sign In</div>
-                        </Link>
-                    )}
+  // Logging cartItem for debugging
+  console.log("User Data:", reduxUserData);
+  console.log("Cart Item:", cartItem);
+
+  const [active, setActive] = useState("");
+
+  return (
+    <div
+      className={cn("fixed top-5 inset-x-0 w-[80vw] mx-auto z-50", className)}
+    >
+      <Menu className=" " setActive={setActive}>
+        <div className="container flex justify-between h-[10vh] px-6">
+          <div className="left">
+            <Logo className="" height="70" />
+          </div>
+
+          <div className="right routes flex h-full items-center gap-7">
+            <MenuItem setActive={setActive} active={active} item="Services">
+              <div className="flex flex-col space-y-4 text-sm">
+                <HoveredLink href="/web-dev">Web Development</HoveredLink>
+                <HoveredLink href="/interface-design">
+                  Interface Design
+                </HoveredLink>
+                <HoveredLink href="/seo">
+                  Search Engine Optimization
+                </HoveredLink>
+                <HoveredLink href="/branding">Branding</HoveredLink>
+              </div>
+            </MenuItem>
+            <MenuItem setActive={setActive} active={active} item="Pricing">
+              <div className="flex flex-col space-y-4 text-sm">
+                <HoveredLink href="/hobby">Hobby</HoveredLink>
+                <HoveredLink href="/individual">Individual</HoveredLink>
+                <HoveredLink href="/team">Team</HoveredLink>
+                <HoveredLink href="/enterprise">Enterprise</HoveredLink>
+              </div>
+            </MenuItem>
+
+            {reduxUserData && cartItem.length > 0 ? (
+              <MenuItem setActive={setActive} active={active} item="Cart">
+                <div className="text-sm grid grid-cols-2 gap-10 p-4">
+                  {JSONcart.map((item) =>
+                      <ProductItem
+                      title={item.title}
+                      href={`property/${item.id}`}
+                      src={item.images[0]}
+                      description={item.description}
+                    />
+                  
+                  )}
                 </div>
-                <div className="md:hidden">
-                    <button className="text-white focus:outline-none">
-                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-7 6h7"></path>
-                        </svg>
-                    </button>
-                </div>
-            </div>
-        </nav>
-    );
-};
+              </MenuItem>
+            ) : (
+              <MenuItem setActive={setActive} active={active} item="Cart">
+                Cart is empty
+              </MenuItem>
+            )}
 
-export default Navbar;
-
+            {reduxUserData ? (
+              <div className="flex items-center space-x-4">
+                <ManageAccount />
+              </div>
+            ) : (
+              <Link href="/signin">
+                <div className="hover:text-yellow-500">Sign In</div>
+              </Link>
+            )}
+          </div>
+        </div>
+      </Menu>
+    </div>
+  );
+}

@@ -23,10 +23,11 @@ class ManageCartService {
         {
           userID,
           userName,
-          cartItems : JSON.stringify(cartItems),
-          bookedItems:JSON.stringify(bookedItems),
+          cartItem:cartItems ,
+          bookedItems,
         }
       );
+      console.log("cart creation succes")
       return doc;
     } catch (error) {
       console.log("Appwrite service :: createCart :: error", error);
@@ -34,15 +35,15 @@ class ManageCartService {
     }
   }
 
-  async updateCart(cart){
-    const { slug, userID, userName, cartItems, bookedItems } = cart;
+  async updateCart({ slug, userID, userName, cartItem, bookedItems }){
     try {
       const doc = await this.database.updateDocument(
         envConf.appwriteDatabaseID,
         envConf.appwriteCollectionID,
         slug,
-        { userID, userName, cartItems, bookedItems }
+        { userID, userName, cartItem, bookedItems }
       );
+      console.log("cart updation succes")
       return doc;
     } catch (error) {
       console.log("Appwrite service :: updateCart :: error", error);
@@ -57,6 +58,7 @@ class ManageCartService {
         envConf.appwriteCollectionID,
         []
       );
+      console.log(`get cart success`)
       return carts;
     } catch (error) {
       console.log("Appwrite service :: getCart :: error", error);

@@ -73,7 +73,7 @@ throw error;
 
   async getCurrentUserbyProvider (){
     try{
-      const session = await this.account.getSession('current')
+      const session = await this.account.getSession("current")
       return session ? session : null
     }
     catch(error){

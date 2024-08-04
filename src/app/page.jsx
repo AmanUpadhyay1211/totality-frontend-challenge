@@ -1,61 +1,59 @@
 "use client";
+import { useState, useEffect } from "react";
 import properties from "@/api/properties";
-import authService from "@/appwrite/authService";
+
 import {
   HeroSection,
   PropertyCard,
   ReviewSection,
   Navbar,
+  FilterBar,
 } from "@/components/index";
-import { useSelector,useDispatch } from "react-redux";
-import { login } from "@/Redux/slices/authSlice";
-import { createCart, } from "@/Redux/slices/cartSlice";
-import { useEffect } from "react";
-import manageCartService from "@/appwrite/manageCartService";
 
-export default function Home({ children }) {
-  const dispatch = useDispatch();
-  const userData = useSelector((state) => state.auth.userData);
-  const cartData = useSelector((state) => state.cart.cart);
-  console.log(userData)
-
-  // const getUSer = async () => {
-  //   const user = await authService.getCurrentUser();
-  //   console.log(user);
-  //   const user2 = await authService.getCurrentUserbyProvider();
-  //   console.log(user2);
-  // };
-  // getUSer();
+export default function Home() {
+  const [filteredProperties, setFilteredProperties] = useState(properties);
+  const [filters, setFilters] = useState({});
 
   useEffect(() => {
-    async function ReduxConfig() {
-      const user = await authService.getCurrentUser();
-      if (user) {
-        dispatch(login(user));
+    // Filter logic here based on filters state
+    let filtered = properties;
 
-        if (!cartData.userID) {
-          const carts = await manageCartService.getCart();
-          const userCart = carts.documents.find(cart => cart.userID === user.$id);
-          if (userCart) {
-            dispatch(setCart(userCart));
-          }
-        }
-      }
+    if (filters.city) {
+      filtered = filtered.filter((property) =>
+        property.location.includes(filters.city)
+      );
     }
-    ReduxConfig();
-  }, [dispatch, cartData.userID]);
-  
+
+    if (filters.priceRange) {
+      const [minPrice, maxPrice] = filters.priceRange;
+      filtered = filtered.filter(
+        (property) => property.price >= minPrice && property.price <= maxPrice
+      );
+    }
+
+    if (filters.amenities && filters.amenities.length > 0) {
+      filtered = filtered.filter((property) =>
+        filters.amenities.every((amenity) =>
+          property.amenities.includes(amenity)
+        )
+      );
+    }
+
+    setFilteredProperties(filtered);
+  }, [filters]);
 
   return (
     <main className="min-h-screen bg-black/[0.96] antialiased bg-grid-white/[0.02]">
-      <Navbar />
+      <div className="relative w-[80vw] flex items-center justify-center">
+        <Navbar className="" />
+      </div>
       <HeroSection />
-      <div>
-        {properties.map((property) => (
+      <FilterBar setFilters={setFilters} />
+      <div className="property-grid">
+        {filteredProperties.map((property) => (
           <PropertyCard key={property.id} property={property} />
         ))}
       </div>
-
       <ReviewSection />
     </main>
   );

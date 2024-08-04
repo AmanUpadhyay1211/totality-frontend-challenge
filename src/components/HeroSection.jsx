@@ -26,7 +26,7 @@ const HeroSection = () => {
             key={index}
             className={`absolute inset-0 transition-opacity duration-1000 ${index === currentImageIndex ? 'opacity-100' : 'opacity-0'}`}
           >
-            <Image src={image} alt={`Slide ${index}`} fill objectFit="cover" />
+            <Image src={image} alt={`Slide ${index}`} fill  style={{objectFit:"cover"}} />
           </div>
         ))}
       </div>

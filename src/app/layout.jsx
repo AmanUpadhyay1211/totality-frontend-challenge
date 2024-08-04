@@ -1,8 +1,8 @@
+// src/app/layout.jsx
 import { Inter } from "next/font/google";
 import "./globals.css";
-
-import AppProvider from "./AppProvider";
 import { Fotter } from "@/components/index";
+import AppProvider from "./AppProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -11,15 +11,13 @@ export const metadata = {
   description: "INDIA's no.1 property rental platform",
 };
 
-export default function RootLayout({
-  children,
-}) {
+export default function RootLayout({ children }) {
   return (
     <html lang="en" className="dark">
-       <body>
+      <body>
         <AppProvider>
           {children}
-          <Fotter/>
+          <Fotter />
         </AppProvider>
       </body>
     </html>
