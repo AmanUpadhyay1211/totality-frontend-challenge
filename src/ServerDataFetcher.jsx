@@ -38,7 +38,7 @@ const ServerDataFetcher = ({ children }) => {
     };
 
     fetchData();
-  }, []);
+  }, [dispatch]);
 
   return (
     <AppProvider >

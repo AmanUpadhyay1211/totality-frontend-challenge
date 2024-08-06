@@ -72,7 +72,7 @@ function SignIn() {
           Sign in to your account
         </h2>
         <p className="mt-2 text-center text-sm text-gray-600">
-          Don't have an account?&nbsp;
+        Don&apos;t have an account?&nbsp;
           <Link
             href="/signup"
             className="font-medium text-blue-500 hover:underline"
