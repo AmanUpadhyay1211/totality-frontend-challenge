@@ -73,7 +73,7 @@ export default function Navbar({ className }) {
             </MenuItem>
 
             {reduxUserData && cartItem.length > 0 ? (
-              <MenuItem setActive={setActive} active={active} item="Cart">
+             <Link href={'/cart'}> <MenuItem setActive={setActive} active={active} item="Cart">
                 <div className="text-sm grid grid-cols-2 gap-10 p-4">
                   {JSONcart.map((item) =>
                       <ProductItem
@@ -81,11 +81,11 @@ export default function Navbar({ className }) {
                       href={`property/${item.id}`}
                       src={item.images[0]}
                       description={item.description}
+                      key={item.id}
                     />
-                  
                   )}
                 </div>
-              </MenuItem>
+              </MenuItem></Link>
             ) : (
               <MenuItem setActive={setActive} active={active} item="Cart">
                 Cart is empty

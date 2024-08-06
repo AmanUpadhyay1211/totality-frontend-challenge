@@ -12,35 +12,25 @@ import {
 
 export default function Home() {
   const [filteredProperties, setFilteredProperties] = useState(properties);
-  const [filters, setFilters] = useState({});
 
-  useEffect(() => {
-    // Filter logic here based on filters state
-    let filtered = properties;
-
-    if (filters.city) {
-      filtered = filtered.filter((property) =>
-        property.location.includes(filters.city)
+  const handleFilterChange = (filters) => {
+    const { cities, amenities, bedrooms, priceRange } = filters;
+    const newFilteredProperties = properties.filter((property) => {
+      const matchesCity = cities.length === 0 || cities.includes(property.city);
+      const matchesAmenities =
+        amenities.length === 0 ||
+        amenities.every((amenity) => property.amenities.includes(amenity));
+      const matchesBedrooms =
+        bedrooms.length === 0 || bedrooms.includes(property.bedrooms);
+      const matchesPrice =
+        property.price >= priceRange[0] && property.price <= priceRange[1];
+      return (
+        matchesCity && matchesAmenities && matchesBedrooms && matchesPrice
       );
-    }
+    });
+    setFilteredProperties(newFilteredProperties);
+  };
 
-    if (filters.priceRange) {
-      const [minPrice, maxPrice] = filters.priceRange;
-      filtered = filtered.filter(
-        (property) => property.price >= minPrice && property.price <= maxPrice
-      );
-    }
-
-    if (filters.amenities && filters.amenities.length > 0) {
-      filtered = filtered.filter((property) =>
-        filters.amenities.every((amenity) =>
-          property.amenities.includes(amenity)
-        )
-      );
-    }
-
-    setFilteredProperties(filtered);
-  }, [filters]);
 
   return (
     <main className="min-h-screen bg-black/[0.96] antialiased bg-grid-white/[0.02]">
@@ -48,8 +38,8 @@ export default function Home() {
         <Navbar className="" />
       </div>
       <HeroSection />
-      <FilterBar setFilters={setFilters} />
-      <div className="property-grid">
+      <FilterBar onFilterChange={handleFilterChange} />
+      <div className="property-grid grid-cols-2">
         {filteredProperties.map((property) => (
           <PropertyCard key={property.id} property={property} />
         ))}

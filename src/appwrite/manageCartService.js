@@ -13,7 +13,7 @@ class ManageCartService {
 
   // CRUD operation for Cart
   async createCart(cart){
-    const { slug, userID, userName, cartItems, bookedItems } = cart;
+    const { slug, userID, userName, cartItem, bookedItems } = cart;
     console.log(cart)
     try {
       const doc = await this.database.createDocument(
@@ -23,7 +23,7 @@ class ManageCartService {
         {
           userID,
           userName,
-          cartItem:cartItems ,
+          cartItem ,
           bookedItems,
         }
       );
@@ -41,7 +41,7 @@ class ManageCartService {
         envConf.appwriteDatabaseID,
         envConf.appwriteCollectionID,
         slug,
-        { userID, userName, cartItem, bookedItems }
+        {userID : userID,userName : userName, cartItem: cartItem, bookedItems : bookedItems }
       );
       console.log("cart updation succes")
       return doc;

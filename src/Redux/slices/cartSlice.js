@@ -22,10 +22,22 @@ export const cartSlice = createSlice({
     },
     removeBookedItem: (state, action) => {
       state.cart.bookedItems = state.cart.bookedItems.filter(bookedItem => bookedItem !== action.payload);
-    }
+    },
+    incrementItemQuantity: (state, action) => {
+      const item = state.cartItems.find(item => item.id === action.payload);
+      if (item) {
+        item.quantity += 1;
+      }
+    },
+    decrementItemQuantity: (state, action) => {
+      const item = state.cartItems.find(item => item.id === action.payload);
+      if (item && item.quantity > 1) {
+        item.quantity -= 1;
+      }
+    },
   }
 });
 
-export const { setCart, addCartItem, removeCartItem, addBookedItem, removeBookedItem } = cartSlice.actions;
+export const { setCart, addCartItem, removeCartItem, addBookedItem, removeBookedItem , incrementItemQuantity,decrementItemQuantity} = cartSlice.actions;
 
 export default cartSlice.reducer;
