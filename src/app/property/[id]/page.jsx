@@ -32,8 +32,8 @@ function PropertyPage() {
             <div className="flex flex-col space-y-4">
               <Image 
                 src={property.images[0]} 
-                height={100} 
-                width={100} 
+                height={500} 
+                width={800} 
                 alt="thumbnail" 
                 className="rounded-md shadow-lg w-full h-auto"
               />
