@@ -1,7 +1,6 @@
 // src/app/layout.jsx
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { Fotter } from "@/components/index";
 import AppProvider from "./AppProvider";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -17,7 +16,6 @@ export default function RootLayout({ children }) {
       <body>
         <AppProvider>
           {children}
-          <Fotter />
         </AppProvider>
       </body>
     </html>

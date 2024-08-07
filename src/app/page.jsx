@@ -7,7 +7,7 @@ import {
   PropertyCard,
   ReviewSection,
   Navbar,
-  FilterBar,
+  FilterBar,Fotter
 } from "@/components/index";
 
 export default function Home() {
@@ -39,12 +39,17 @@ export default function Home() {
       </div>
       <HeroSection />
       <FilterBar onFilterChange={handleFilterChange} />
+
+      <div className="card">
+      </div>
       <div className="property-grid grid-cols-2">
         {filteredProperties.map((property) => (
           <PropertyCard key={property.id} property={property} />
         ))}
       </div>
+      
       <ReviewSection />
+      <Fotter />
     </main>
   );
 }
