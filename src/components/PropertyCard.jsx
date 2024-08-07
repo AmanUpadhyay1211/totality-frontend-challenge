@@ -113,7 +113,7 @@ function PropertyCard({ property }) {
             target="__blank"
             className="px-4 py-2 rounded-xl text-xs font-normal dark:text-white"
           >
-            Location →
+            {location} →
           </CardItem>
           <div onClick={() => handleAddToCart(property)}><CardItem
             translateZ={20}

@@ -31,13 +31,6 @@ export default function Navbar({ className }) {
     setJSONcart(parsedCart);
   }, [cartItem]);
 
-  // Ensure we log the entire reduxCartData object for debugging
-  console.log("Redux Cart Data:", reduxCartData);
-
-  // Logging cartItem for debugging
-  console.log("User Data:", reduxUserData);
-  console.log("Cart Item:", cartItem);
-
   const [active, setActive] = useState("");
 
   return (
@@ -46,12 +39,14 @@ export default function Navbar({ className }) {
     >
       <Menu className=" " setActive={setActive}>
         <div className="container flex justify-between h-[10vh] px-6">
-          <div className="left">
+          <div className="left flex justify-center items-center">
             <Logo className="" height="70" />
           </div>
 
           <div className="right routes flex h-full items-center gap-7">
-            <MenuItem setActive={setActive} active={active} item="Services">
+
+
+            {/* <MenuItem setActive={setActive} active={active} item="Services">
               <div className="flex flex-col space-y-4 text-sm">
                 <HoveredLink href="/web-dev">Web Development</HoveredLink>
                 <HoveredLink href="/interface-design">
@@ -62,35 +57,39 @@ export default function Navbar({ className }) {
                 </HoveredLink>
                 <HoveredLink href="/branding">Branding</HoveredLink>
               </div>
-            </MenuItem>
-            <MenuItem setActive={setActive} active={active} item="Pricing">
-              <div className="flex flex-col space-y-4 text-sm">
-                <HoveredLink href="/hobby">Hobby</HoveredLink>
-                <HoveredLink href="/individual">Individual</HoveredLink>
-                <HoveredLink href="/team">Team</HoveredLink>
-                <HoveredLink href="/enterprise">Enterprise</HoveredLink>
-              </div>
-            </MenuItem>
+            </MenuItem> */}
 
             {reduxUserData && cartItem.length > 0 ? (
-             <Link href={'/cart'}> <MenuItem setActive={setActive} active={active} item="Cart">
-                <div className="text-sm grid grid-cols-2 gap-10 p-4">
-                  {JSONcart.map((item) =>
+              <Link href={"/cart"}>
+                {" "}
+                <MenuItem setActive={setActive} active={active} item="Cart">
+                  <div className="text-sm grid grid-cols-2 gap-3 w-30vw p-4">
+                    {JSONcart.map((item) => (
                       <ProductItem
-                      title={item.title}
-                      href={`property/${item.id}`}
-                      src={item.images[0]}
-                      description={item.description}
-                      key={item.id}
-                    />
-                  )}
-                </div>
-              </MenuItem></Link>
+                        title={item.title}
+                        href={`property/${item.id}`}
+                        src={item.images[0]}
+                        description={item.description}
+                        key={item.id}
+                      />
+                    ))}
+                  </div>
+                </MenuItem>
+              </Link>
             ) : (
               <MenuItem setActive={setActive} active={active} item="Cart">
                 Cart is empty
               </MenuItem>
             )}
+
+            <MenuItem setActive={setActive} active={active} item="More">
+              <div className="flex flex-col space-y-4 text-sm">
+                <HoveredLink href="/contact">Contact</HoveredLink>
+                <HoveredLink href="/about">About</HoveredLink>
+                <HoveredLink href="/explore">Explore</HoveredLink>
+                <HoveredLink href="/social-media">Social-Media</HoveredLink>
+              </div>
+            </MenuItem>
 
             {reduxUserData ? (
               <div className="flex items-center space-x-4">

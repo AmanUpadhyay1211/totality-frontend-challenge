@@ -1,6 +1,6 @@
 "use client"; // Ensure this is at the top of the file
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import manageCartService from "@/appwrite/manageCartService";
 import authService from "@/appwrite/authService";
 import { login } from "@/Redux/slices/authSlice";
@@ -8,9 +8,11 @@ import { setCart } from "@/Redux/slices/cartSlice";
 import { useDispatch } from "react-redux";
 import { Provider } from "react-redux";
 import store from "@/Redux/store";
+import Loading from "./loading"; // Import the Loading component
 
 const AppContent = ({ children }) => {
   const dispatch = useDispatch();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -34,11 +36,17 @@ const AppContent = ({ children }) => {
         }
       } catch (error) {
         console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchData();
   }, [dispatch]);
+
+  if (loading) {
+    return <Loading />; // Use the Loading component
+  }
 
   return <>{children}</>;
 };
