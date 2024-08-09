@@ -15,6 +15,7 @@ export default function Navbar({ className }) {
   const reduxUserData = useSelector((state) => state.auth.userData);
   const reduxCartData = useSelector((state) => state.cart.cart);
   const [cartItem, setcartItem] = useState(reduxCartData?.cartItem || []);
+  console.log(reduxUserData)
   const [JSONcart, setJSONcart] = useState([]);
   useEffect(() => {
     setcartItem(reduxCartData?.cartItem || []);

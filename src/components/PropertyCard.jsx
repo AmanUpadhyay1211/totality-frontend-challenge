@@ -36,28 +36,22 @@ function PropertyCard({ property }) {
     router.push(`/property/${id}`)
 }
 
-  const handleAddToCart = async () => {
-    // console.log("Add to cart clicked");
+const handleAddToCart = async () => {
+  try {
     if (userData) {
-      if (cartData && cartData.userID ) {
+      if (cartData && cartData.userID) {
         const carts = await manageCartService.getCart();
-        const userCart = carts.documents.find(cart => cart.userID === userData.$id);
-        // User has a cart, update it
-        const updatedCartItem = [...userCart.cartItem];
-        // console.log('userCart by db :', userCart)
-        const newItem = JSON.stringify(property);
-        updatedCartItem.push(newItem);
-        // console.log(updatedCartItem);
+        const userCart = carts.documents.find(cart => cart.userID === userData?.$id || userData?.email);
+        const updatedCartItem = [...userCart.cartItem, JSON.stringify(property)];
         await manageCartService.updateCart({
           slug: userCart.$id,
           cartItem: updatedCartItem,
         });
         dispatch(addCartItem(JSON.stringify(property)));
       } else {
-        // User does not have a cart, create a new one
         const newCart = {
           slug: ID.unique(),
-          userID: userData.$id,
+          userID: userData?.$id || userData?.email,
           userName: userData.name,
           cartItem: [JSON.stringify(property)],
           bookedItems: [],
@@ -65,13 +59,16 @@ function PropertyCard({ property }) {
         const createdCart = await manageCartService.createCart(newCart);
         if (createdCart) {
           dispatch(setCart(createdCart));
-          // dispatch(addCartItem(property));
         }
       }
     } else {
-      setShowPopup(true)
+      setShowPopup(true);
     }
-  };
+  } catch (error) {
+    console.error("Error adding to cart:", error);
+  }
+};
+
 
   return (
     <CardContainer className="inter-var">

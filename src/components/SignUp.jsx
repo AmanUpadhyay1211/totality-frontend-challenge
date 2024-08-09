@@ -24,6 +24,22 @@ function SignUp() {
     formState: { errors, isSubmitting },
   } = useForm();
 
+
+  const handleAuthLogin = async (provider) => {
+    setError("");
+    try {
+      if (session) {
+        await signOut();
+      }
+      const res = await signIn(provider);
+      dispatch(login(res))
+    } catch (error) {
+      console.error(error);
+      setError(error.message);
+    }
+  };
+
+
   const onSignUp = async (data) => {
     setError("");
     try {
@@ -58,28 +74,6 @@ function SignUp() {
     }
   };
 
-  const handleOAuthLogin = async (provider) => {
-    try {
-      const existingUSer = await authService.getCurrentUser();
-      console.log(existingUSer)
-      if (existingUSer) {
-        const prevUserLogout = await authService.logout();
-        if (prevUserLogout !== null) {
-          dispatch(logout());
-          const OAuth2User = await authService.loginWith(provider);
-          dispatch(login(OAuth2User));
-          router.push("/");
-        }
-      } else {
-        const OAuth2User = await authService.loginWith(provider);
-        dispatch(login(OAuth2User));
-        router.push("/");
-      }
-    } catch (error) {
-      setError(error.message);
-    }
-  };
-
   return (
     <main className="flex items-center justify-center w-full min-h-screen bg-gray-50">
       <div className="w-full max-w-md bg-white rounded-xl p-10 pt-0 shadow-md">
@@ -101,13 +95,13 @@ function SignUp() {
         {error && <p className="text-red-600 mt-4 text-center">{error}</p>}
         <div className="mt-8 space-y-4">
           <button
-            onClick={() => handleOAuthLogin("google")}
+            onClick={() => handleAuthLogin("google")}
             className="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50"
           >
             <FaGoogle className="mr-2" /> Continue with Google
           </button>
           <button
-            onClick={() => handleOAuthLogin("github")}
+            onClick={() => handleAuthLogin("github")}
             className="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50"
           >
             <FaGithub className="mr-2" /> Continue with GitHub

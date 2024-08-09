@@ -1,38 +1,41 @@
-"use client"; // Ensure this is at the top of the file
-
+"use client";
 import { useEffect, useState } from "react";
-import manageCartService from "@/appwrite/manageCartService";
-import authService from "@/appwrite/authService";
+import { Provider, useDispatch } from "react-redux";
+import store from "@/Redux/store";
+import Loading from "./loading";
+import { SessionProvider, useSession } from "next-auth/react";
 import { login } from "@/Redux/slices/authSlice";
 import { setCart } from "@/Redux/slices/cartSlice";
-import { useDispatch } from "react-redux";
-import { Provider } from "react-redux";
-import store from "@/Redux/store";
-import Loading from "./loading"; // Import the Loading component
+import authService from "@/appwrite/authService";
+import manageCartService from "@/appwrite/manageCartService";
 
 const AppContent = ({ children }) => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
+  const { data: session, status } = useSession(); // status can be "loading", "authenticated", or "unauthenticated"
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const user = await authService.getCurrentUser();
-        const OAuthUser = await authService.getCurrentUserbyProvider();
+        let user = null;
         let userCart = null;
+
+        // Fetch user data from Appwrite (email/password authentication)
+        user = await authService.getCurrentUser();
 
         if (user) {
           dispatch(login(user));
           const carts = await manageCartService.getCart();
-          userCart = carts.documents.find(cart => cart.userID === user.$id);
-          dispatch(setCart(userCart));
-          console.log(user, userCart);
-        } else if (OAuthUser) {
-          dispatch(login(OAuthUser));
+          userCart = carts.documents.find((cart) => cart.userID === user.$id);
+        }
+
+        // If user is not found, check if there's an OAuth session
+        if (!user && session && status === "authenticated") {
+          user = session.user;
+          dispatch(login(user));
           const carts = await manageCartService.getCart();
-          userCart = carts.documents.find(cart => cart.userID === OAuthUser.userId);
+          userCart = carts.documents.find((cart) => cart.userID === user.email);
           dispatch(setCart(userCart));
-          console.log(OAuthUser, userCart);
         }
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -41,11 +44,13 @@ const AppContent = ({ children }) => {
       }
     };
 
-    fetchData();
-  }, [dispatch]);
+    if (status !== "loading") {
+      fetchData();
+    }
+  }, [dispatch, session, status]);
 
   if (loading) {
-    return <Loading />; // Use the Loading component
+    return <Loading />;
   }
 
   return <>{children}</>;
@@ -53,9 +58,11 @@ const AppContent = ({ children }) => {
 
 const AppProvider = ({ children }) => {
   return (
-    <Provider store={store}>
-      <AppContent>{children}</AppContent>
-    </Provider>
+    <SessionProvider>
+      <Provider store={store}>
+        <AppContent>{children}</AppContent>
+      </Provider>
+    </SessionProvider>
   );
 };
 

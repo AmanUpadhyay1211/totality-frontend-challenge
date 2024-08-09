@@ -39,20 +39,6 @@ class AuthService {
     }
   }
 
-  async loginWith(provider){
-    try{
-     const session = this.account.createOAuth2Session(
-        provider, // provider
-        'http://localhost:3000/', // redirect here on success
-        'http://localhost:3000/fail', // redirect here on failure
-        );
-        return (session ? session : null)
-    }
-    catch(error){
-throw error;
-    }
-  }
-
   async logout() {
     try {
       const deleteSession = await this.account.deleteSession('current');
@@ -68,16 +54,6 @@ throw error;
        return result
     } catch (error) {
       console.log("Appwrite serive :: getCurrentUser :: error", error);
-    }
-  }
-
-  async getCurrentUserbyProvider (){
-    try{
-      const session = await this.account.getSession("current")
-      return session ? session : null
-    }
-    catch(error){
-      console.log("Appwrite serive :: getCurrentUserbyProvider :: error", error);
     }
   }
 }

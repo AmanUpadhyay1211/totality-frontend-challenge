@@ -4,57 +4,62 @@ import { FaGoogle, FaGithub } from "react-icons/fa";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import authService from "../appwrite/authService";
 import { useDispatch } from "react-redux";
-import { login, logout } from "@/Redux/slices/authSlice";
+import { login } from "@/Redux/slices/authSlice";
 import { useForm } from "react-hook-form";
 import { Logo, Btn, Input } from "./index";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useSession, signIn, signOut } from "next-auth/react";
+import { setCookie } from "nookies";
 
 function SignIn() {
   const [show, setShow] = useState(false);
   const [error, setError] = useState("");
   const dispatch = useDispatch();
   const router = useRouter();
+  const { data: session } = useSession();
+  console.log(session);
+
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm();
 
-  const handleLogoutIfLoggedIn = async () => {
-    const existingUser = await authService.getCurrentUser();
-    if (existingUser) {
-      await authService.logout();
-      dispatch(logout());
+  const handleAuthLogin = async (provider) => {
+    setError("");
+    try {
+      if (session) {
+        await signOut();
+      }
+      const res = await signIn(provider);
+      dispatch(login(res))
+      setCookie(null, 'userLoggedIn', 'true', {
+        maxAge: 30 * 24 * 60 * 60,
+        path: '/',
+      });
+    } catch (error) {
+      console.error(error);
+      setError(error.message);
     }
   };
 
   const onSignIn = async (data) => {
     setError("");
     try {
-      await handleLogoutIfLoggedIn();
+      if (session) {
+        await signOut();
+      }
       const loginSession = await authService.createSession({ ...data });
       if (loginSession) {
         const userData = await authService.getCurrentUser();
         if (userData) {
           dispatch(login(userData));
           router.push("/");
-        }
-      }
-    } catch (error) {
-      setError(error.message);
-    }
-  };
-
-  const handleOAuthLogin = async (provider) => {
-    try {
-      await handleLogoutIfLoggedIn();
-      const OAuth2User = await authService.loginWith(provider);
-      if (OAuth2User) {
-        const userData = await authService.getCurrentUserbyProvider();
-        if (userData) {
-          dispatch(login(userData));
-          router.push("/");
+          setCookie(null, 'userLoggedIn', 'true', {
+            maxAge: 30 * 24 * 60 * 60,
+            path: '/',
+          });
         }
       }
     } catch (error) {
@@ -72,7 +77,7 @@ function SignIn() {
           Sign in to your account
         </h2>
         <p className="mt-2 text-center text-sm text-gray-600">
-        Don&apos;t have an account?&nbsp;
+          Don&apos;t have an account?&nbsp;
           <Link
             href="/signup"
             className="font-medium text-blue-500 hover:underline"
@@ -83,13 +88,13 @@ function SignIn() {
         {error && <p className="text-red-600 mt-4 text-center">{error}</p>}
         <div className="mt-8 space-y-4">
           <button
-            onClick={() => handleOAuthLogin("google")}
+            onClick={() => handleAuthLogin("google")}
             className="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50"
           >
             <FaGoogle className="mr-2" /> Continue with Google
           </button>
           <button
-            onClick={() => handleOAuthLogin("github")}
+            onClick={() => handleAuthLogin("github")}
             className="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50"
           >
             <FaGithub className="mr-2" /> Continue with Github
