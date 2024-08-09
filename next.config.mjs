@@ -11,7 +11,6 @@ const nextConfig = {
             hostname: '**',
           },
         ],
-        domains : ["api.microlink.io",]
       },
 };
 

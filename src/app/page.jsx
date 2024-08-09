@@ -6,7 +6,8 @@ import {
   PropertyCard,
   ReviewSection,
   Navbar,
-  FilterBar, Fotter
+  FilterBar,
+  Fotter,
 } from "@/components/index";
 
 export default function Home() {
@@ -19,7 +20,8 @@ export default function Home() {
     console.log("Filters:", filters);
     const { cities, amenities, bedrooms, priceRange } = filters;
     const newFilteredProperties = properties.filter((property) => {
-      const matchesCity = cities.length === 0 || cities.includes(property.location);
+      const matchesCity =
+        cities.length === 0 || cities.includes(property.location);
       const matchesAmenities =
         amenities.length === 0 ||
         amenities.every((amenity) => property.amenities.includes(amenity));
@@ -27,9 +29,7 @@ export default function Home() {
         bedrooms.length === 0 || bedrooms.includes(property.bedrooms);
       const matchesPrice =
         property.price >= priceRange[0] && property.price <= priceRange[1];
-      return (
-        matchesCity && matchesAmenities && matchesBedrooms && matchesPrice
-      );
+      return matchesCity && matchesAmenities && matchesBedrooms && matchesPrice;
     });
     console.log("Filtered Properties:", newFilteredProperties);
     setFilteredProperties(newFilteredProperties);
@@ -57,11 +57,14 @@ export default function Home() {
     <main className="min-h-screen bg-white dark:bg-black">
       <Navbar />
       <HeroSection />
-      <FilterBar onFilterChange={handleFilterChange} availableProperties={filteredProperties.length} />
-      <div className="px-4 py-8 min-h-[100vh]">
-        <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 min-[1300]:grid-cols-3 gap-6">
+      <FilterBar
+        onFilterChange={handleFilterChange}
+        availableProperties={filteredProperties.length}
+      />
+      <div className="px-4 py-2 min-h-[100vh]">
+        <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 min-[1400px]:grid-cols-3 gap-6">
           {paginatedProperties.map((property) => (
-            <PropertyCard widt key={property.id} property={property} />
+            <PropertyCard key={property.id} property={property} />
           ))}
         </div>
       </div>
