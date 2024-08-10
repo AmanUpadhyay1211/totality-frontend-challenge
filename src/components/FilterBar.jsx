@@ -77,7 +77,7 @@ const FilterBar = ({ onFilterChange, availableProperties }) => {
   };
 
   return (
-    <div className="bg-white dark:bg-slate-700 my-6 mx-4 p-4 rounded-2xl shadow-md flex flex-wrap justify-between items-center gap-4">
+    <div className="bg-blue-300 text-black dark-text-white dark:bg-slate-700 my-6 mx-4 p-4 rounded-2xl shadow-md flex flex-wrap justify-between items-center gap-4">
       {/* City Filter */}
       <div className="relative">
         <button

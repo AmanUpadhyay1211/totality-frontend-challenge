@@ -54,7 +54,7 @@ export default function Home() {
   );
 
   return (
-    <main className="min-h-screen bg-white dark:bg-black">
+    <main className="min-h-screen bg-slate-600 dark:bg-black">
       <Navbar />
       <HeroSection />
       <FilterBar

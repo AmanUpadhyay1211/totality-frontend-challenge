@@ -72,18 +72,18 @@ function SignUp() {
         name,
       });
       if (newAccount) {
-        const loginSession = await authService.createSession({email,password})
-        if(loginSession){
+        const loginSession = await authService.createSession({ email, password });
+        if (loginSession) {
           const userData = await authService.getCurrentUser();
-          if(userData){
-            await authService.setAvatar({avatar:data.avatar})
+          if (userData) {
+            await authService.setAvatar({ avatar: data.avatar });
             const userDataWithUpdatedAvatar = await authService.getCurrentUser();
-            dispatch(login(userDataWithUpdatedAvatar))
+            dispatch(login(userDataWithUpdatedAvatar));
             setCookie(null, "userLoggedIn", "true", {
               maxAge: 30 * 24 * 60 * 60,
               path: "/",
             });
-            router.push("/")
+            router.push("/");
           }
         }
       }
@@ -93,21 +93,21 @@ function SignUp() {
   };
 
   return (
-    <main className="flex items-center justify-center w-full min-h-screen bg-gray-50">
+    <main className="flex items-center justify-center w-full min-h-screen bg-gray-50 dark:bg-gray-900">
       <LogoBar />
       <VerticalNavbar />
-      <div className="w-full max-w-md bg-white rounded-xl p-10 pt-0 shadow-md">
+      <div className="w-full max-w-md bg-white dark:bg-gray-800 rounded-xl p-10 pt-0 shadow-md dark:shadow-lg">
         <div className="mb-6 flex justify-center">
           <Logo className="w-24 h-24" />
         </div>
-        <h2 className="text-center text-2xl text-black font-bold leading-tight">
+        <h2 className="text-center text-2xl font-bold leading-tight text-gray-900 dark:text-gray-100">
           Create a new account
         </h2>
-        <p className="mt-2 text-center text-sm text-gray-600">
+        <p className="mt-2 text-center text-sm text-gray-600 dark:text-gray-400">
           Already have an account?&nbsp;
           <Link
             href="/signin"
-            className="font-medium text-blue-500 hover:underline"
+            className="font-medium text-blue-500 hover:underline dark:text-blue-400 dark:hover:text-blue-300"
           >
             Sign In
           </Link>
@@ -116,13 +116,13 @@ function SignUp() {
         <div className="mt-8 space-y-4">
           <button
             onClick={() => handleAuthLogin("google")}
-            className="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50"
+            className="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 dark:text-gray-300 dark:bg-gray-700 dark:border-gray-600 dark:hover:bg-gray-600"
           >
             <FaGoogle className="mr-2" /> Continue with Google
           </button>
           <button
             onClick={() => handleAuthLogin("github")}
-            className="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50"
+            className="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 dark:text-gray-300 dark:bg-gray-700 dark:border-gray-600 dark:hover:bg-gray-600"
           >
             <FaGithub className="mr-2" /> Continue with GitHub
           </button>
@@ -136,6 +136,7 @@ function SignUp() {
               {...register("name", {
                 required: { value: true, message: "This field is required" },
               })}
+              className="bg-gray-100 dark:bg-gray-700"
             />
             {errors.name && (
               <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>
@@ -153,6 +154,7 @@ function SignUp() {
                   message: "Email must be at least 6 characters",
                 },
               })}
+              className="bg-gray-100 dark:bg-gray-700"
             />
             {errors.email && (
               <p className="text-red-500 text-sm mt-1">
@@ -172,6 +174,7 @@ function SignUp() {
                   message: "Password must be at least 4 characters",
                 },
               })}
+              className="bg-gray-100 dark:bg-gray-700"
             />
             {errors.password && (
               <p className="text-red-500 text-sm mt-1">
@@ -181,7 +184,7 @@ function SignUp() {
             <button
               type="button"
               onClick={() => setShow(!show)}
-              className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500"
+              className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500 dark:text-gray-400"
             >
               {show ? <FiEyeOff /> : <FiEye />}
             </button>
@@ -190,7 +193,7 @@ function SignUp() {
             <Input
               label="Avatar (optional)"
               type="file"
-              className="mb-4"
+              className="mb-4 bg-gray-100 dark:bg-gray-700"
               accept="image/png, image/jpg, image/jpeg, image/gif"
               {...register("avatar", { required: false })}
             />
@@ -199,7 +202,7 @@ function SignUp() {
             <Btn
               type="submit"
               disabled={isSubmitting}
-              className="bg-blue-500 text-white py-2 px-4 rounded-lg shadow-md hover:bg-blue-600 transition duration-300"
+              className="bg-blue-500 text-white py-2 px-4 rounded-lg shadow-md hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700"
             >
               Sign Up
             </Btn>

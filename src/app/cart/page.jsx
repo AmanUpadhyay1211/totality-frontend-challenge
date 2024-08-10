@@ -9,45 +9,45 @@ import {
 import Image from "next/image";
 import Script from "next/script";
 import envConf from "@/envConf/envConf";
-import { LogoBar,VerticalNavbar } from '@/components/index';
+import { LogoBar, VerticalNavbar } from "@/components/index";
+
 const Cart = () => {
   const dispatch = useDispatch();
   const reduxUserData = useSelector((state) => state.auth.userData);
   const reduxCartData = useSelector((state) => state.cart.cart);
   const [cartItem, setCartItem] = useState(reduxCartData?.cartItem || []);
   const [JSONcart, setJSONcart] = useState([]);
-  
+
   useEffect(() => {
     setCartItem(reduxCartData?.cartItem || []);
   }, [reduxCartData]);
-  
+
   useEffect(() => {
-    const parsedCart = cartItem.map((item) => {
-      try {
-        return JSON.parse(item);
-      } catch (error) {
-        console.error("Invalid JSON string:", item);
-        return null;
-      }
-    }).filter(item => item !== null); // Filter out any null items
+    const parsedCart = cartItem
+      .map((item) => {
+        try {
+          return JSON.parse(item);
+        } catch (error) {
+          console.error("Invalid JSON string:", item);
+          return null;
+        }
+      })
+      .filter((item) => item !== null);
     setJSONcart(parsedCart);
   }, [cartItem]);
 
-  const [amount, setAmount] = useState(JSONcart.reduce(
-    (total, item) => total + item.price * item.quantity,
-    0
-  ));
+  const [amount, setAmount] = useState(
+    JSONcart.reduce((total, item) => total + item.price * item.quantity, 0)
+  );
   const [isProcessing, setIsProcessing] = useState(false);
 
   const handlePayment = async () => {
     setIsProcessing(true);
     try {
-      // Create Order
       const response = await fetch("/api/razorpayPayment", { method: "POST" });
       const data = await response.json();
 
       if (response.ok) {
-        // Initializing Razorpay
         const options = {
           key: envConf.razorpayKeyID,
           amount: amount * 100,
@@ -57,7 +57,6 @@ const Cart = () => {
           order_id: data.orderId,
           handler: function (response) {
             console.log(response);
-            // Handle successful payment (e.g.: update UI, send to server)
           },
           prefill: {
             name: "Gaurav Jha",
@@ -65,7 +64,7 @@ const Cart = () => {
             contact: "9996969699",
           },
           theme: {
-            color: "3399cc",
+            color: "#3b82f6", // Updated color to match Tailwind's blue-500
           },
         };
         const rzp1 = new window.Razorpay(options);
@@ -100,40 +99,46 @@ const Cart = () => {
 
   return (
     <div className="container mx-auto my-10 p-5">
-      <Script src="https://checkout.razorpay.com/v1/checkout.js"/>
-      <LogoBar/><VerticalNavbar/>
-      <h2 className="text-2xl font-bold mb-5">Cart Items</h2>
+      <Script src="https://checkout.razorpay.com/v1/checkout.js" />
+      <LogoBar />
+      <VerticalNavbar />
+      <h2 className="text-3xl font-bold mb-8 text-center text-gray-800 dark:text-gray-200">
+        Cart Items
+      </h2>
       {reduxCartData ? (
-        <div className="flex gap-4 justify-between">
-          <div className="w-2/3">
+        <div className="flex flex-col lg:flex-row gap-8">
+          <div className="lg:w-2/3">
             {JSONcart.map((item) => (
               <div
                 key={item.id}
-                className="flex items-center p-5 mb-5 text-black bg-white shadow-lg rounded-lg"
+                className="flex flex-col lg:flex-row items-center p-5 mb-5 bg-white dark:bg-gray-800 shadow-lg rounded-lg"
               >
                 <Image
                   src={item.images[0]}
                   alt={item.title}
                   height={500}
                   width={500}
-                  className="w-24 h-24 rounded-md"
+                  className="w-full lg:w-24 h-24 rounded-md mb-4 lg:mb-0"
                 />
-                <div className="ml-5 flex-1">
-                  <h3 className="text-xl font-semibold">{item.title}</h3>
-                  <p className="text-gray-500">{item.description}</p>
-                  <p className="text-lg font-bold">₹ {item.price}</p>
-                  <div className="flex items-center mt-2">
-                    <p className="mr-2">Number of Nights -</p>
+                <div className="lg:ml-5 flex-1 text-center lg:text-left">
+                  <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
+                    {item.title}
+                  </h3>
+                  <p className="text-gray-500 dark:text-gray-400">
+                    {item.description}
+                  </p>
+                  <p className="text-lg font-bold text-blue-500">₹ {item.price}</p>
+                  <div className="flex items-center justify-center lg:justify-start mt-4">
                     <button
                       onClick={() => handleDecrement(item.id)}
-                      className="px-2 py-1 border rounded-md"
+                      className="px-3 py-1 border border-gray-300 dark:border-gray-600 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700"
                     >
                       -
                     </button>
-                    <span className="mx-2">{item.quantity}</span>
+                    <span className="mx-4">{item.quantity}</span>
                     <button
                       onClick={() => handleIncrement(item.id)}
-                      className="px-2 py-1 border rounded-md"
+                      className="px-3 py-1 border border-gray-300 dark:border-gray-600 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700"
                     >
                       +
                     </button>
@@ -141,36 +146,52 @@ const Cart = () => {
                 </div>
                 <button
                   onClick={() => handleRemove(item.id)}
-                  className="ml-5 px-4 py-2 bg-red-400 text-white rounded-md"
+                  className="ml-0 lg:ml-5 mt-4 lg:mt-0 px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition"
                 >
                   Delete
                 </button>
               </div>
             ))}
           </div>
-          <div className="w-1/3 p-5 text-black bg-white shadow-lg rounded-lg">
-            <h3 className="text-xl font-bold mb-5">Order Summary</h3>
-            <p className="mb-2">Total Items: {totalItems}</p>
-            <p className="mb-2">Total Amount: ₹ {totalAmount.toFixed(2)}</p>
+          <div className="lg:w-1/3 p-5 bg-white dark:bg-gray-800 shadow-lg rounded-lg">
+            <h3 className="text-xl font-bold mb-5 text-gray-900 dark:text-gray-100">
+              Order Summary
+            </h3>
+            <p className="mb-4 text-gray-700 dark:text-gray-300">
+              Total Items: {totalItems}
+            </p>
+            <p className="mb-4 text-gray-700 dark:text-gray-300">
+              Total Amount: ₹ {totalAmount.toFixed(2)}
+            </p>
             {reduxUserData ? (
               <>
-                <p className="mb-2">Full Name: {reduxUserData.name}</p>
-                <p className="mb-5">Email: {reduxUserData.email}</p>
+                <p className="mb-2 text-gray-700 dark:text-gray-300">
+                  Full Name: {reduxUserData.name}
+                </p>
+                <p className="mb-6 text-gray-700 dark:text-gray-300">
+                  Email: {reduxUserData.email}
+                </p>
               </>
             ) : (
-              <p className="mb-5">User data not available</p>
+              <p className="mb-6 text-gray-700 dark:text-gray-300">
+                User data not available
+              </p>
             )}
             <button
               onClick={handlePayment}
               disabled={isProcessing}
-              className="w-full px-4 py-2 bg-blue-500 text-white rounded-md"
+              className={`w-full px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition ${
+                isProcessing ? "opacity-50 cursor-not-allowed" : ""
+              }`}
             >
               {isProcessing ? "Processing..." : "Checkout"}
             </button>
           </div>
         </div>
       ) : (
-        <p>Loading cart data...</p>
+        <p className="text-center text-gray-700 dark:text-gray-300">
+          Loading cart data...
+        </p>
       )}
     </div>
   );

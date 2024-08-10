@@ -104,7 +104,7 @@ export default function Navbar({ className }) {
                 </div>
               ) : (
                 <Link href="/signin">
-                  <div className="hover:text-yellow-500 text-white">
+                  <div className="hover:text-yellow-500 text-black dark:text-white">
                     Sign In
                   </div>
                 </Link>

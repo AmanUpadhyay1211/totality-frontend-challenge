@@ -108,7 +108,7 @@ const handleAddToCart = async () => {
             as={Link}
             href={`https://www.google.com/maps/place/${location}`}
             target="__blank"
-            className="px-4 py-2 rounded-xl text-xs font-normal dark:text-white"
+            className="px-4 py-2 rounded-xl text-xs font-normal text-slate-900 dark:text-white"
           >
             {location} →
           </CardItem>

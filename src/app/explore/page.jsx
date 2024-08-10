@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { FaMapMarkedAlt, FaSearch, FaHeart, FaHome } from "react-icons/fa";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { LogoBar,VerticalNavbar } from '@/components/index';
+import { LogoBar, VerticalNavbar } from '@/components/index';
 
 const ExploreMorePage = () => {
   useEffect(() => {
@@ -13,14 +13,14 @@ const ExploreMorePage = () => {
   }, []);
 
   return (
-    <div className="bg-gray-100 text-gray-900 min-h-screen flex flex-col items-center justify-center">
+    <div className="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 min-h-screen flex flex-col items-center justify-center">
       <ToastContainer />
-      <LogoBar/><VerticalNavbar/>
+      <LogoBar /><VerticalNavbar />
       <div className="container mx-auto px-8 py-16">
-        <h1 className="text-5xl font-bold text-center mb-12">Explore More</h1>
+        <h1 className="text-4xl md:text-5xl font-bold text-center mb-12">Explore More</h1>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          <div className="bg-white shadow-lg rounded-lg p-8 hover:shadow-xl transition-shadow duration-300">
+          <div className="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-8 hover:shadow-xl transition-shadow duration-300">
             <FaMapMarkedAlt className="text-blue-500 text-6xl mx-auto mb-4" />
             <h2 className="text-2xl font-semibold text-center mb-2">
               Discover Nearby
@@ -30,7 +30,7 @@ const ExploreMorePage = () => {
             </p>
           </div>
 
-          <div className="bg-white shadow-lg rounded-lg p-8 hover:shadow-xl transition-shadow duration-300">
+          <div className="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-8 hover:shadow-xl transition-shadow duration-300">
             <FaSearch className="text-green-500 text-6xl mx-auto mb-4" />
             <h2 className="text-2xl font-semibold text-center mb-2">
               Advanced Search
@@ -40,7 +40,7 @@ const ExploreMorePage = () => {
             </p>
           </div>
 
-          <div className="bg-white shadow-lg rounded-lg p-8 hover:shadow-xl transition-shadow duration-300">
+          <div className="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-8 hover:shadow-xl transition-shadow duration-300">
             <FaHeart className="text-red-500 text-6xl mx-auto mb-4" />
             <h2 className="text-2xl font-semibold text-center mb-2">
               Saved Favorites
@@ -50,7 +50,7 @@ const ExploreMorePage = () => {
             </p>
           </div>
 
-          <div className="bg-white shadow-lg rounded-lg p-8 hover:shadow-xl transition-shadow duration-300">
+          <div className="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-8 hover:shadow-xl transition-shadow duration-300">
             <FaHome className="text-yellow-500 text-6xl mx-auto mb-4" />
             <h2 className="text-2xl font-semibold text-center mb-2">
               New Listings
@@ -60,7 +60,7 @@ const ExploreMorePage = () => {
             </p>
           </div>
 
-          <div className="bg-white shadow-lg rounded-lg p-8 hover:shadow-xl transition-shadow duration-300">
+          <div className="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-8 hover:shadow-xl transition-shadow duration-300">
             <FaSearch className="text-purple-500 text-6xl mx-auto mb-4" />
             <h2 className="text-2xl font-semibold text-center mb-2">
               Virtual Tours
@@ -70,7 +70,7 @@ const ExploreMorePage = () => {
             </p>
           </div>
 
-          <div className="bg-white shadow-lg rounded-lg p-8 hover:shadow-xl transition-shadow duration-300">
+          <div className="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-8 hover:shadow-xl transition-shadow duration-300">
             <FaHeart className="text-pink-500 text-6xl mx-auto mb-4" />
             <h2 className="text-2xl font-semibold text-center mb-2">
               Personalized Recommendations
