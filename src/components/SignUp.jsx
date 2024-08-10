@@ -7,65 +7,83 @@ import { FiEye, FiEyeOff } from "react-icons/fi";
 import { useDispatch } from "react-redux";
 import { login, logout } from "@/Redux/slices/authSlice";
 import { useForm } from "react-hook-form";
-import { Logo, Btn, Input } from "./index";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FaGoogle, FaGithub } from "react-icons/fa";
-
+import { useSession, signIn, signOut } from "next-auth/react";
+import { setCookie, destroyCookie } from "nookies";
+import { Logo, Btn, Input, LogoBar, VerticalNavbar } from "@/components/index";
 
 function SignUp() {
   const [show, setShow] = useState(false);
   const [error, setError] = useState("");
   const dispatch = useDispatch();
   const router = useRouter();
+  const { data: session } = useSession();
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm();
 
-
   const handleAuthLogin = async (provider) => {
     setError("");
     try {
       if (session) {
         await signOut();
+        destroyCookie(null, "userLoggedIn", {
+          path: "/",
+        });
       }
       const res = await signIn(provider);
-      dispatch(login(res))
+      dispatch(login(res));
+      setCookie(null, "userLoggedIn", "true", {
+        maxAge: 30 * 24 * 60 * 60,
+        path: "/",
+      });
     } catch (error) {
       console.error(error);
       setError(error.message);
     }
   };
 
-
   const onSignUp = async (data) => {
     setError("");
     try {
-      const existingUSer = await authService.getCurrentUserbyProvider();
-      console.log(existingUSer)
-      if (existingUSer) {
-        const prevUserLogout = await authService.logout();
-        if (prevUserLogout) {
-          dispatch(logout());
-          const { name, email, password } = data;
-          if (data.avatar && data.avatar.length > 0) {
-            const res = await manageCartService.uploadFile(data.avatar[0]);
-            if (res) {
-              data.avatar = res.$id;
-            } else {
-              throw new Error("Failed to upload avatar");
-            }
-          }
-          const newAccount = await authService.createAccount({
-            email,
-            password,
-            name,
-          });
-          if (newAccount) {
-            newAccount.prefs({ avatar: data.avatar });
-            router.push("/signin");
+      if (session) {
+        await signOut();
+        destroyCookie(null, "userLoggedIn", {
+          path: "/",
+        });
+        dispatch(logout());
+      }
+      const { name, email, password } = data;
+      if (data.avatar && data.avatar.length > 0) {
+        const res = await manageCartService.uploadFile(data.avatar[0]);
+        if (res) {
+          data.avatar = res.$id;
+        } else {
+          throw new Error("Failed to upload avatar");
+        }
+      }
+      const newAccount = await authService.createAccount({
+        email,
+        password,
+        name,
+      });
+      if (newAccount) {
+        const loginSession = await authService.createSession({email,password})
+        if(loginSession){
+          const userData = await authService.getCurrentUser();
+          if(userData){
+            await authService.setAvatar({avatar:data.avatar})
+            const userDataWithUpdatedAvatar = await authService.getCurrentUser();
+            dispatch(login(userDataWithUpdatedAvatar))
+            setCookie(null, "userLoggedIn", "true", {
+              maxAge: 30 * 24 * 60 * 60,
+              path: "/",
+            });
+            router.push("/")
           }
         }
       }
@@ -76,6 +94,8 @@ function SignUp() {
 
   return (
     <main className="flex items-center justify-center w-full min-h-screen bg-gray-50">
+      <LogoBar />
+      <VerticalNavbar />
       <div className="w-full max-w-md bg-white rounded-xl p-10 pt-0 shadow-md">
         <div className="mb-6 flex justify-center">
           <Logo className="w-24 h-24" />

@@ -9,7 +9,7 @@ export async function middleware(request) {
     return NextResponse.redirect(new URL('/', request.url)); // Redirect to home if logged in
   }
   if (!userLoggedIn && (request.nextUrl.pathname === '/manage-account' )) {
-    return NextResponse.redirect(new URL('/', request.url)); // Redirect to home if logged in
+    return NextResponse.redirect(new URL('/', request.url)); // Redirect to home if  not logged in
   }
 
 

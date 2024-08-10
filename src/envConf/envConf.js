@@ -8,8 +8,8 @@ const envConf = {
     myPassword : String(process.env.NEXT_PUBLIC_EMAIL_PASS),
     razorpayKeyID : String(process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID),
     razorpayKeySecret: String(process.env.NEXT_PUBLIC_RAZORPAY_KEY_SECRET),
-    githubClientID : String(process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID),
-    githubClientSecret : String(process.env.NEXT_PUBLIC_GITHUB_CLIENT_SECRET),
+    githubClientID : String(process.env.GITHUB_CLIENT_ID),
+    githubClientSecret : String(process.env.GITHUB_CLIENT_SECRET),
 };
 
 export default envConf;

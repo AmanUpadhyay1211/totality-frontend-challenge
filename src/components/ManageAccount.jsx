@@ -8,35 +8,35 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { signOut, useSession } from "next-auth/react";
 import { AiOutlineLogout, AiOutlineSetting } from "react-icons/ai";
+import Link from "next/link";
+import manageCartService from "@/appwrite/manageCartService";
 
 function ManageAccount() {
   const reduxUserData = useSelector((state) => state.auth.userData);
-  console.log(reduxUserData)
+  console.log(reduxUserData);
   const [userData, setUserData] = useState(reduxUserData);
   const [menuOpen, setMenuOpen] = useState(false);
   const dispatch = useDispatch();
   const router = useRouter();
-  const { data: session } = useSession()
-  const sessionUserData = session?.user
+  const { data: session } = useSession();
+  const sessionUserData = session?.user;
 
   const handleLogout = async () => {
     try {
-      if(userData && userData.$id){
+      if (userData && userData.$id) {
         await authService.logout();
         dispatch(logout());
-        destroyCookie(null, 'userLoggedIn', {
-          path: '/',  
+        destroyCookie(null, "userLoggedIn", {
+          path: "/",
+        });
+        router.push("/");
+      } else {
+        signOut();
+        destroyCookie(null, "userLoggedIn", {
+          path: "/",
         });
         router.push("/");
       }
-      else{
-        signOut()
-        destroyCookie(null, 'userLoggedIn', {
-          path: '/',  
-        });
-        router.push("/")
-      }
-      
     } catch (error) {
       console.error("Failed to logout:", error);
     }
@@ -58,10 +58,31 @@ function ManageAccount() {
 
   return (
     <div className="relative">
-      <div className="flex items-center space-x-4 cursor-pointer" onClick={toggleMenu}>
+      <div
+        className="flex items-center space-x-4 cursor-pointer"
+        onClick={toggleMenu}
+      >
         <div className="flex items-center justify-center w-10 h-10 bg-blue-600 rounded-full text-white font-bold">
-          {userData ? (
-            <Image src={userData?.prefs?.avatar || userData.image} alt="avatar" height={500} width={500} className="rounded-full" />
+          {userData.prefs || userData.image ? (
+            userData.prefs ? (
+              <Image
+                src={
+                  manageCartService.getFilePreview(userData.prefs.avatar)?.href
+                } // Ensure that the URL is extracted correctly
+                alt="avatar"
+                height={500}
+                width={500}
+                className="rounded-full"
+              />
+            ) : (
+              <Image
+                src={userData.image}
+                alt="avatar"
+                height={500}
+                width={500}
+                className="rounded-full"
+              />
+            )
           ) : (
             getInitials(userData?.userName || userData?.name)
           )}
@@ -71,29 +92,51 @@ function ManageAccount() {
         <div className="absolute right-0 mt-2 w-auto bg-white rounded-md shadow-lg z-20">
           <div className="flex items-center space-x-2 p-4">
             <div className="flex items-center justify-center w-10 h-10 bg-blue-600 rounded-full text-white font-bold">
-            {userData ? (
-            <Image src={userData?.prefs?.avatar || userData.image} alt="avatar" height={500} width={500} className="rounded-full" />
-          ) : (
-            getInitials(userData?.userName || userData?.name)
-          )}
+              {userData || userData.image ? (
+                userData.prefs ? (
+                  <Image
+                    src={
+                      manageCartService.getFilePreview(userData.prefs.avatar)
+                        ?.href
+                    } // Ensure that the URL is extracted correctly
+                    alt="avatar"
+                    height={500}
+                    width={500}
+                    className="rounded-full"
+                  />
+                ) : (
+                  <Image
+                    src={userData.image}
+                    alt="avatar"
+                    height={500}
+                    width={500}
+                    className="rounded-full"
+                  />
+                )
+              ) : (
+                getInitials(userData?.userName || userData?.name)
+              )}
             </div>
             <div className="text-sm ">
-            
               <p className="text-gray-900 font-semibold">{userData?.name}</p>
               <p className="text-gray-600">{userData?.email}</p>
             </div>
           </div>
           <div className="py-2">
-            <button
-              onClick={() => router.push("/manage-account")}
+            <Link
+              href={"/manage-account"}
               className="flex justify-start items-center gap-2 w-full px-4 py-2 text-left text-gray-800 hover:bg-gray-100"
-            > <AiOutlineSetting/>
+            >
+              {" "}
+              <AiOutlineSetting />
               Manage Account
-            </button>
+            </Link>
             <button
               onClick={handleLogout}
               className=" w-full flex justify-start items-center gap-2 px-4 py-2 text-left text-gray-800 hover:bg-gray-100"
-            > <AiOutlineLogout/>
+            >
+              {" "}
+              <AiOutlineLogout />
               Logout
             </button>
           </div>

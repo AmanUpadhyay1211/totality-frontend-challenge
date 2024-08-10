@@ -10,15 +10,14 @@ import { Logo, Btn, Input } from "./index";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useSession, signIn, signOut } from "next-auth/react";
-import { setCookie } from "nookies";
-
+import { setCookie,destroyCookie } from "nookies";
+import { LogoBar,VerticalNavbar } from '@/components/index';
 function SignIn() {
   const [show, setShow] = useState(false);
   const [error, setError] = useState("");
   const dispatch = useDispatch();
   const router = useRouter();
   const { data: session } = useSession();
-  console.log(session);
 
   const {
     register,
@@ -31,10 +30,13 @@ function SignIn() {
     try {
       if (session) {
         await signOut();
+        destroyCookie(null, 'userLoggedIn', {
+          path: '/',  
+        });
       }
       const res = await signIn(provider);
       dispatch(login(res))
-      setCookie(null, 'userLoggedIn', 'true', {
+setCookie(null, 'userLoggedIn', 'true', {
         maxAge: 30 * 24 * 60 * 60,
         path: '/',
       });
@@ -49,17 +51,20 @@ function SignIn() {
     try {
       if (session) {
         await signOut();
+        destroyCookie(null, 'userLoggedIn', {
+          path: '/',  
+        });
       }
       const loginSession = await authService.createSession({ ...data });
       if (loginSession) {
         const userData = await authService.getCurrentUser();
         if (userData) {
-          dispatch(login(userData));
-          router.push("/");
+          dispatch(login(userData)); 
           setCookie(null, 'userLoggedIn', 'true', {
             maxAge: 30 * 24 * 60 * 60,
             path: '/',
           });
+          router.push("/");
         }
       }
     } catch (error) {
@@ -69,6 +74,7 @@ function SignIn() {
 
   return (
     <div className="flex items-center justify-center w-full min-h-screen bg-gray-50">
+       <LogoBar/><VerticalNavbar/>
       <div className="w-full max-w-md bg-white rounded-xl p-10 pt-0 shadow-md">
         <div className="mb-6 flex justify-center">
           <Logo className="w-24 h-24" />

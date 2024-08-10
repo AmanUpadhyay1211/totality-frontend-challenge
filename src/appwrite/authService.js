@@ -56,6 +56,18 @@ class AuthService {
       console.log("Appwrite serive :: getCurrentUser :: error", error);
     }
   }
+
+
+  async setAvatar ({avatar}){
+    try {
+      const avatrSet = await this.account.updatePrefs(
+        {avatar : avatar} // prefs
+    );
+    return avatrSet ? avatrSet : null;
+    } catch (error) {
+      console.log("Avatar Setup Error: ", error)
+    }
+  }
 }
 
 const authService = new AuthService();

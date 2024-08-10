@@ -6,6 +6,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { FaGithub, FaLinkedin, FaInstagram, FaTwitter, FaFacebook } from 'react-icons/fa';
 import Link from 'next/link';
+import { LogoBar,VerticalNavbar } from '@/components/index';
 
 function Contact() {
   const [email, setEmail] = useState('');
@@ -42,6 +43,7 @@ function Contact() {
   return (
     <div className="max-h-screen max-w-screen bg-gray-100 dark:bg-gray-900 py-12 pt-20 relative overflow-x-hidden overflow-y-hidden">
       <Boxes className="absolute top-0 left-0 w-full h-full z-0" />
+      <LogoBar/><VerticalNavbar/>
       <div className="max-w-2xl mx-auto p-4 relative z-10">
         <h1 className="text-lg md:text-7xl text-center font-sans font-bold mb-8 text-white">
           Contact Us

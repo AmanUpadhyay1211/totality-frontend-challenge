@@ -9,7 +9,7 @@ import {
 import Image from "next/image";
 import Script from "next/script";
 import envConf from "@/envConf/envConf";
-
+import { LogoBar,VerticalNavbar } from '@/components/index';
 const Cart = () => {
   const dispatch = useDispatch();
   const reduxUserData = useSelector((state) => state.auth.userData);
@@ -101,6 +101,7 @@ const Cart = () => {
   return (
     <div className="container mx-auto my-10 p-5">
       <Script src="https://checkout.razorpay.com/v1/checkout.js"/>
+      <LogoBar/><VerticalNavbar/>
       <h2 className="text-2xl font-bold mb-5">Cart Items</h2>
       {reduxCartData ? (
         <div className="flex gap-4 justify-between">

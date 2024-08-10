@@ -3,6 +3,7 @@ import React, { useEffect } from "react";
 import { FaMapMarkedAlt, FaSearch, FaHeart, FaHome } from "react-icons/fa";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { LogoBar,VerticalNavbar } from '@/components/index';
 
 const ExploreMorePage = () => {
   useEffect(() => {
@@ -14,6 +15,7 @@ const ExploreMorePage = () => {
   return (
     <div className="bg-gray-100 text-gray-900 min-h-screen flex flex-col items-center justify-center">
       <ToastContainer />
+      <LogoBar/><VerticalNavbar/>
       <div className="container mx-auto px-8 py-16">
         <h1 className="text-5xl font-bold text-center mb-12">Explore More</h1>
 

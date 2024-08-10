@@ -4,6 +4,8 @@ import { FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn } from "react-icons/f
 import { toast, ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import Image from "next/image";
+import { LogoBar,VerticalNavbar } from '@/components/index';
+
 
 const SocialMedia = () => {
   const notify = () => {
@@ -19,7 +21,8 @@ const SocialMedia = () => {
   return (
     <div className="bg-gray-100 text-gray-900 min-h-screen flex flex-col items-center justify-center">
       <ToastContainer />
-      <h1 className="text-4xl font-bold text-center mb-6">Connect with Us</h1>
+      <LogoBar/><VerticalNavbar/>
+      <h1 className="text-4xl font-bold py-5 text-center mb-6">Connect with Us</h1>
       <p className="text-center text-xl mb-8 max-w-2xl">
         Follow Next Door on social media to stay updated with the latest news, property listings, and more.
         Join our community and be a part of our growing family!

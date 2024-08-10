@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Image from "next/image";
 import properties from "@/api/properties";
+import { LogoBar,VerticalNavbar } from '@/components/index';
 
 function PropertyPage() {
   const params = useParams();
@@ -27,6 +28,7 @@ function PropertyPage() {
   return (
     <div className="min-h-screen bg-gray-100 p-4 sm:p-8">
       <div className="container mx-auto">
+      <LogoBar/><VerticalNavbar/>
         <div className="flex flex-col lg:flex-row lg:space-x-8">
           <div className="lg:w-2/3">
             <div className="flex flex-col space-y-4">
