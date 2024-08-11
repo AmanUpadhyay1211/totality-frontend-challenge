@@ -149,7 +149,7 @@ function SignIn() {
             <button
               type="button"
               onClick={() => setShow(!show)}
-              className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500 dark:text-gray-400"
+              className="absolute inset-y-0 top-7 right-0 pr-3 flex items-center text-gray-500 dark:text-gray-400"
             >
               {show ? <FiEyeOff /> : <FiEye />}
             </button>

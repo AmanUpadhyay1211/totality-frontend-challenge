@@ -13,6 +13,7 @@ import FilterBar from "./FilterBar";
 import Popup from "./Popup";
 import LogoBar from "./LogoBar";
 import VerticalNavbar from "./VerticalNavbar";
+import ThemeToggler from "./ThemeToggler";
 
 export {
   Btn,
@@ -30,4 +31,5 @@ export {
   Popup,
   LogoBar,
   VerticalNavbar,
+  ThemeToggler,
 };

@@ -17,7 +17,7 @@ export default function VerticalNavbar() {
     <>
       <button
         onClick={toggleNavbar}
-        className="fixed top-0 right-0 p-4 z-50 text-white dark:text-gray-200"
+        className="fixed top-0 right-0 p-4 z-50 text-black dark:text-gray-200"
       >
         {isOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
       </button>
@@ -41,7 +41,7 @@ export default function VerticalNavbar() {
           </div>
         ) : (
           <Link href="/signin">
-            <div className="text-white dark:text-gray-200 hover:text-yellow-500 dark:hover:text-yellow-400">
+            <div className="text-black font-bold dark:text-gray-200 hover:text-yellow-500 dark:hover:text-yellow-400">
               Sign In
             </div>
           </Link>
@@ -59,7 +59,7 @@ export default function VerticalNavbar() {
           <div className="text-xl font-bold text-gray-100 dark:text-gray-300">
             More
           </div>
-          <div className="flex flex-col space-y-4 mt-4">
+          <div className="flex flex-col text-black  dark:text-gray-300 space-y-4 mt-4">
             <Link href="/contact">
               <p className="hover:text-yellow-500 dark:hover:text-yellow-400">
                 Contact

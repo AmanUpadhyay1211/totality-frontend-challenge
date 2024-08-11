@@ -2,6 +2,7 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
 import AppProvider from "./AppProvider";
+import { ThemeToggler } from "@/components/index";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,6 +18,7 @@ export default function RootLayout({ children }) {
         <AppProvider>
           {children}
         </AppProvider>
+        <ThemeToggler/>
       </body>
     </html>
   );
