@@ -4,7 +4,8 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   removeCartItem,
   incrementItemQuantity,
-  decrementItemQuantity,
+  decrementItemQuantity,addBookedItem,
+  addCartItem
 } from "@/Redux/slices/cartSlice";
 import Image from "next/image";
 import Script from "next/script";
@@ -36,21 +37,29 @@ const Cart = () => {
     setJSONcart(parsedCart);
   }, [cartItem]);
 
-  const [amount, setAmount] = useState(
-    JSONcart.reduce((total, item) => total + item.price * item.quantity, 0)
+  const totalItems = JSONcart.length;
+  const amount = JSONcart.reduce(
+    (total, item) => total + item.price * item.quantity,
+    0
   );
   const [isProcessing, setIsProcessing] = useState(false);
 
   const handlePayment = async () => {
     setIsProcessing(true);
     try {
-      const response = await fetch("/api/razorpayPayment", { method: "POST" });
+      const response = await fetch("/api/razorpayPayment", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ amount }), // Pass amount here
+      });
       const data = await response.json();
-
+  
       if (response.ok) {
         const options = {
           key: envConf.razorpayKeyID,
-          amount: amount * 100,
+          amount: amount * 100, // Use the same amount for Razorpay options
           currency: "INR",
           name: "Next Door : Test Payment",
           description: "Next Door : Test Payment",
@@ -59,12 +68,12 @@ const Cart = () => {
             console.log(response);
           },
           prefill: {
-            name: "Gaurav Jha",
-            email: "gouravhumai@gmail.com",
-            contact: "9996969699",
+            name: reduxUserData.name || reduxUserData?.userName,
+            email: reduxUserData.email,
+            contact: "+91 XXXXX XXXXX",
           },
           theme: {
-            color: "#3b82f6", // Updated color to match Tailwind's blue-500
+            color: "#3b82f6",
           },
         };
         const rzp1 = new window.Razorpay(options);
@@ -76,8 +85,10 @@ const Cart = () => {
       console.log("payment failed:", error);
     } finally {
       setIsProcessing(false);
+      // add Cart Item to booked item and remove from cart
     }
   };
+  ;
 
   const handleRemove = (id) => {
     dispatch(removeCartItem(id));
@@ -91,18 +102,14 @@ const Cart = () => {
     dispatch(decrementItemQuantity(id));
   };
 
-  const totalItems = JSONcart.length;
-  const totalAmount = JSONcart.reduce(
-    (total, item) => total + item.price * item.quantity,
-    0
-  );
+
 
   return (
     <div className="container mx-auto my-10 p-5">
       <Script src="https://checkout.razorpay.com/v1/checkout.js" />
       <LogoBar />
       <VerticalNavbar />
-      <h2 className="text-3xl font-bold mb-8 text-center text-gray-800 dark:text-gray-200">
+      <h2 className="text-3xl font-bold mb-8 text-center text-white dark:text-gray-200">
         Cart Items
       </h2>
       {reduxCartData ? (
@@ -161,7 +168,7 @@ const Cart = () => {
               Total Items: {totalItems}
             </p>
             <p className="mb-4 text-gray-700 dark:text-gray-300">
-              Total Amount: ₹ {totalAmount.toFixed(2)}
+              Total Amount: ₹ {amount.toFixed(2)}
             </p>
             {reduxUserData ? (
               <>

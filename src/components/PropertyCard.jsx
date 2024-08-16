@@ -32,7 +32,7 @@ function PropertyCard({ property }) {
   } = property;
 
   const openPropertyPage = (id)=>{
-    console.log("open property page clicked")
+    // console.log("open property page clicked")
     router.push(`/property/${id}`)
 }
 

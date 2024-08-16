@@ -8,6 +8,7 @@ import {
   Navbar,
   FilterBar,
   Fotter,
+  VerticalNavbar,LogoBar
 } from "@/components/index";
 
 export default function Home() {
@@ -17,7 +18,7 @@ export default function Home() {
   const totalPages = Math.ceil(filteredProperties.length / propertiesPerPage);
 
   const handleFilterChange = (filters) => {
-    console.log("Filters:", filters);
+    // console.log("Filters:", filters);
     const { cities, amenities, bedrooms, priceRange } = filters;
     const newFilteredProperties = properties.filter((property) => {
       const matchesCity =
@@ -31,7 +32,7 @@ export default function Home() {
         property.price >= priceRange[0] && property.price <= priceRange[1];
       return matchesCity && matchesAmenities && matchesBedrooms && matchesPrice;
     });
-    console.log("Filtered Properties:", newFilteredProperties);
+    // console.log("Filtered Properties:", newFilteredProperties);
     setFilteredProperties(newFilteredProperties);
     setCurrentPage(1); // Reset to first page on filter change
   };
@@ -55,7 +56,13 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-slate-600 dark:bg-black">
-      <Navbar />
+      <div className="md:hidden">
+        <VerticalNavbar />
+        <LogoBar/>
+      </div>
+      <div className="md:block hidden">
+        <Navbar />
+      </div>
       <HeroSection />
       <FilterBar
         onFilterChange={handleFilterChange}
@@ -77,7 +84,7 @@ export default function Home() {
         >
           Previous
         </button>
-        <span className="mx-2 text-gray-700 dark:text-white">
+        <span className="mx-2 text-black dark:text-white">
           Page {currentPage} of {totalPages}
         </span>
         <button

@@ -1,7 +1,7 @@
 # Next Door - Property Rental Platform
 
 
-<img src="" />
+<img src="/images/NextDoorHomePage.png" />
 
 ## Overview
 

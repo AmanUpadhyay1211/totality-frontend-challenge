@@ -10,8 +10,8 @@ import { Logo, Btn, Input } from "./index";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useSession, signIn, signOut } from "next-auth/react";
-import { setCookie, destroyCookie } from "nookies";
 import { LogoBar, VerticalNavbar } from '@/components/index';
+import { setCookie } from "nookies";
 
 function SignIn() {
   const [show, setShow] = useState(false);
@@ -29,18 +29,10 @@ function SignIn() {
   const handleAuthLogin = async (provider) => {
     setError("");
     try {
-      if (session) {
-        await signOut();
-        destroyCookie(null, 'userLoggedIn', {
-          path: '/',  
-        });
-      }
+      if (session) {await signOut();}
       const res = await signIn(provider);
       dispatch(login(res));
-      setCookie(null, 'userLoggedIn', 'true', {
-        maxAge: 30 * 24 * 60 * 60,
-        path: '/',
-      });
+      router.push("/");
     } catch (error) {
       console.error(error);
       setError(error.message);
@@ -52,16 +44,13 @@ function SignIn() {
     try {
       if (session) {
         await signOut();
-        destroyCookie(null, 'userLoggedIn', {
-          path: '/',  
-        });
       }
       const loginSession = await authService.createSession({ ...data });
       if (loginSession) {
         const userData = await authService.getCurrentUser();
         if (userData) {
           dispatch(login(userData)); 
-          setCookie(null, 'userLoggedIn', 'true', {
+          setCookie(null, 'traditionalUSer', 'true', {
             maxAge: 30 * 24 * 60 * 60,
             path: '/',
           });

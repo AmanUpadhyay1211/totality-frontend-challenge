@@ -369,7 +369,7 @@ const properties= [
     location: 'Lonavala, India',
     bedrooms: 3,
     amenities: ['WiFi', 'Air Conditioning', 'Infinity Pool', 'Hot Tub', 'Free Parking', 'Gym', 'Sauna', 'Private Chef', 'Breakfast Included', 'Rooftop Access'],
-    images: [Images[31]],
+    images: [Images[11]],
     rating: '4.8/5 (210)',
     quantity: 1
   }

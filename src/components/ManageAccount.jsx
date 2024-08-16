@@ -1,6 +1,5 @@
 "use client";
 import React, { useState } from "react";
-import { destroyCookie } from "nookies";
 import { useDispatch, useSelector } from "react-redux";
 import authService from "@/appwrite/authService";
 import { logout } from "@/Redux/slices/authSlice";
@@ -10,10 +9,11 @@ import { signOut, useSession } from "next-auth/react";
 import { AiOutlineLogout, AiOutlineSetting } from "react-icons/ai";
 import Link from "next/link";
 import manageCartService from "@/appwrite/manageCartService";
+import { destroyCookie } from "nookies";
 
 function ManageAccount() {
   const reduxUserData = useSelector((state) => state.auth.userData);
-  console.log(reduxUserData);
+  // console.log(reduxUserData);
   const [userData, setUserData] = useState(reduxUserData);
   const [menuOpen, setMenuOpen] = useState(false);
   const dispatch = useDispatch();
@@ -26,15 +26,12 @@ function ManageAccount() {
       if (userData && userData.$id) {
         await authService.logout();
         dispatch(logout());
-        destroyCookie(null, "userLoggedIn", {
-          path: "/",
+        destroyCookie(null, 'traditionalUSer', {
+          path: '/',  
         });
         router.push("/");
       } else {
         signOut();
-        destroyCookie(null, "userLoggedIn", {
-          path: "/",
-        });
         router.push("/");
       }
     } catch (error) {

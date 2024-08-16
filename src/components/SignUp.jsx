@@ -11,7 +11,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FaGoogle, FaGithub } from "react-icons/fa";
 import { useSession, signIn, signOut } from "next-auth/react";
-import { setCookie, destroyCookie } from "nookies";
+import { setCookie} from "nookies";
 import { Logo, Btn, Input, LogoBar, VerticalNavbar } from "@/components/index";
 
 function SignUp() {
@@ -31,16 +31,11 @@ function SignUp() {
     try {
       if (session) {
         await signOut();
-        destroyCookie(null, "userLoggedIn", {
-          path: "/",
-        });
       }
       const res = await signIn(provider);
       dispatch(login(res));
-      setCookie(null, "userLoggedIn", "true", {
-        maxAge: 30 * 24 * 60 * 60,
-        path: "/",
-      });
+
+      router.push("/");
     } catch (error) {
       console.error(error);
       setError(error.message);
@@ -52,9 +47,7 @@ function SignUp() {
     try {
       if (session) {
         await signOut();
-        destroyCookie(null, "userLoggedIn", {
-          path: "/",
-        });
+
         dispatch(logout());
       }
       const { name, email, password } = data;
@@ -79,9 +72,9 @@ function SignUp() {
             await authService.setAvatar({ avatar: data.avatar });
             const userDataWithUpdatedAvatar = await authService.getCurrentUser();
             dispatch(login(userDataWithUpdatedAvatar));
-            setCookie(null, "userLoggedIn", "true", {
+            setCookie(null, 'traditionalUSer', 'true', {
               maxAge: 30 * 24 * 60 * 60,
-              path: "/",
+              path: '/',
             });
             router.push("/");
           }

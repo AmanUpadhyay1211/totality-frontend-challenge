@@ -1,18 +1,24 @@
 import { NextResponse } from 'next/server';
-import { getCookie } from 'cookies-next'; // Using cookies-next for simplicity
+import { getCookie } from 'cookies-next';
 
 export async function middleware(request) {
-  const userLoggedIn = getCookie('userLoggedIn', { req: request }); // Retrieve the cookie value
-  
-  // If the user is already logged in and trying to access sign-in or sign-up pages
-  // if (userLoggedIn === 'true' && (request.nextUrl.pathname === '/signin' || request.nextUrl.pathname === '/signup')) {
-  //   return NextResponse.redirect(new URL('/', request.url)); // Redirect to home if logged in
+  const traditionalUser = getCookie('traditionalUser', { req: request });
+  const OAuthUser = getCookie('authjs.session-token', { req: request });
+
+  console.log('Traditional User:', traditionalUser);
+  console.log('OAuth User:', OAuthUser);
+
+  // const isAuth = traditionalUser || OAuthUser;
+
+  // Redirect to home if logged in and trying to access signin/signup
+  // if (isAuth && (request.nextUrl.pathname === '/signin' || request.nextUrl.pathname === '/signup')) {
+  //   return NextResponse.redirect(new URL('/', request.url));
   // }
-  if (!userLoggedIn && (request.nextUrl.pathname === '/manage-account' )) {
-    return NextResponse.redirect(new URL('/', request.url)); // Redirect to home if  not logged in
-  }
 
+  // // Redirect to home if not logged in and trying to access protected routes
+  // if (!isAuth && (request.nextUrl.pathname === '/manage-account' || request.nextUrl.pathname === '/cart')) {
+  //   return NextResponse.redirect(new URL('/', request.url));
+  // }
 
-  // Proceed with the request as normal
   return NextResponse.next();
 }

@@ -10,11 +10,13 @@ const razorpay = new Razorpay({
 
 export async function POST(request) {
   try {
+    const { amount } = await request.json(); // Extract amount from the request body
     const order = await razorpay.orders.create({
-      amount: 100 * 100, // Amount in Paise
+      amount: Number(amount) * 100, // Use the amount passed from the frontend (in Paise)
       currency: "INR",
       receipt: "receipt_" + Math.random().toString(36).substring(7),
     });
+
     return NextResponse.json({ orderId: order.id }, { status: 200 });
   } catch (error) {
     console.error(`Error creating order: ${error}`);

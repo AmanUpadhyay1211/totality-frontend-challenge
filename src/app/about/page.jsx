@@ -4,6 +4,7 @@ import { FaRocket, FaUserFriends, FaShieldAlt } from 'react-icons/fa';
 import { FaGithub, FaLinkedin, FaInstagram, FaTwitter, FaFacebook } from 'react-icons/fa';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { LogoBar, VerticalNavbar } from "@/components/index";
 
 const AboutPage = () => {
   const notify = () => {
@@ -20,6 +21,8 @@ const AboutPage = () => {
   return (
     <div className="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 min-h-screen flex items-center justify-center">
       <div className="container mx-auto p-8">
+      <LogoBar />
+      <VerticalNavbar />
         <ToastContainer />
         <h1 className="text-4xl font-bold text-center mb-6">About Us</h1>
         <p className="text-center text-xl mb-8">
